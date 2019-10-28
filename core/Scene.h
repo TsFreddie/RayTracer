@@ -12,6 +12,7 @@
 
 #include "core/LightSource.h"
 #include "core/Shape.h"
+#include "math/geometry.h"
 
 
 using namespace rapidjson;
@@ -24,12 +25,16 @@ public:
 	Scene(){};
 
 	void createScene(Value& scenespecs);
+	std::vector<Shape*>::iterator itShapeBegin();
+	std::vector<Shape*>::iterator itShapeEnd();
 
+	~Scene();
 
 private:
 
 	std::vector<LightSource*> lightSources;
 	std::vector<Shape*> shapes;
+	Vec3f backgroundColor;
 
 };
 

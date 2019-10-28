@@ -26,7 +26,6 @@ private:
     float kd;
     float specular;
     Vec3f diffuse;
-
 };
 
 

@@ -4,7 +4,6 @@
  */
 #include "Shape.h"
 #include "shapes/Sphere.h"
-#include "materials/BlinnPhong.h"
 
 
 
@@ -29,7 +28,7 @@ namespace rt{
         if (newShape) {
             // Assign material
             if (shapeSpec.HasMember("material")) {
-                newShape->material = NULL;
+                newShape->material = Material::createMaterial(shapeSpec["material"]);
             } else {
                 newShape->material = NULL;
             }
@@ -38,7 +37,9 @@ namespace rt{
     }
 
     Shape::~Shape() {
-        delete this->material;
+        if (this->material != NULL) {
+            delete this->material;
+        }
         this->material = NULL;
     }
 

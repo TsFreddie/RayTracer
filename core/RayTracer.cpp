@@ -64,7 +64,7 @@ Vec3f* RayTracer::render(Camera* camera, Scene* scene, int nbounces){
 			}
 
 			if (minHit.mat != NULL) {
-				pixelbuffer[y*width+x] = Vec3f(1,1,1);
+				pixelbuffer[y*width+x] = minHit.mat->Shade();
 			}
 		}
 	}

@@ -27,4 +27,8 @@ void BlinnPhong::setDiffuse(Vec3f color) {
     this->diffuse = color;
 }
 
+Vec3f BlinnPhong::Shade() {
+    return this->diffuse;
+}
+
 } //namespace rt

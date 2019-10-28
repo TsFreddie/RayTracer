@@ -30,7 +30,8 @@ namespace rt{
             if (shapeSpec.HasMember("material")) {
                 newShape->material = Material::createMaterial(shapeSpec["material"]);
             } else {
-                newShape->material = NULL;
+                // Default material
+                newShape->material = new Material();
             }
         }
         return newShape;

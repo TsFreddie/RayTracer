@@ -40,13 +40,14 @@ Vec3f* RayTracer::render(Camera* camera, Scene* scene, int nbounces){
  *
  * @return the tonemapped image
  */
-Vec3f* RayTracer::tonemap(Vec3f* pixelbuffer){
+Vec3f* RayTracer::tonemap(Vec3f* pixelbuffer, int width, int height){
 
-	//---------tonemapping function to be filled--------
-
-
-
-
+	for (int y = 0; y < height; ++y) {
+		for (int x = 0; x < width; ++x) {
+			Vec3f color = pixelbuffer[y*width+x] * 255;
+			pixelbuffer[y*width+x] = color;
+		}
+	}
 
 	return pixelbuffer;
 

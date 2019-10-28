@@ -8,6 +8,29 @@
 namespace rt{
 
 
+// Calculate primary ray
+Ray RayTracer::primRay(Camera* camera, int x, int y) {
+	int width = camera->getWidth();
+	int height = camera->getHeight();
+	float fov = camera->getFov();
+
+	if (x == 400 && y == 400) {
+		int k = 0;
+	}
+	float ratio = width / (float)height;
+
+	Ray ray;
+	ray.raytype = PRIMARY;
+	ray.origin = Vec3f(0,0,0); // TODO: give camera position & look at
+
+	float rx = (2*((x + 0.5f) / width)-1) * tan(fov / 2.0f) * ratio;
+	float ry = (1-2*((y + 0.5f) / height)) * tan(fov / 2.0f);
+
+	ray.direction = Vec3f(rx, ry, 1).normalize();
+
+	return ray;
+}
+
 /**
  * Performs ray tracing to render a photorealistic scene
  *
@@ -19,11 +42,32 @@ namespace rt{
  */
 Vec3f* RayTracer::render(Camera* camera, Scene* scene, int nbounces){
 
-	Vec3f* pixelbuffer=new Vec3f[camera->getWidth()*camera->getHeight()];
+	int width = camera->getWidth();
+	int height = camera->getHeight();
+	Vec3f* pixelbuffer = new Vec3f[width * height];
 
-	//----------main rendering function to be filled------
+	for (int y = 0; y < height; ++y) {
+		for (int x = 0; x < width; ++x) {
+			Ray pr = primRay(camera, x, y);
+			
+			Hit minHit;
+			minHit.distance = INFINITY;
+			minHit.mat = NULL;
 
+			for (auto it = scene->itShapeBegin(); it != scene->itShapeEnd(); ++it) {
+				auto shape = *it;
+				Hit hit;
 
+				if (shape->intersect(pr, hit) && hit.distance < minHit.distance) {
+					minHit = hit;
+				}
+			}
+
+			if (minHit.mat != NULL) {
+				pixelbuffer[y*width+x] = Vec3f(1,1,1);
+			}
+		}
+	}
 
 
 

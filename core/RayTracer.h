@@ -21,6 +21,7 @@ public:
 
 	RayTracer();
 
+	static Ray primRay(Camera* camera, int x, int y);
 	static Vec3f* render(Camera* camera, Scene* scene, int nbounces);
 	static Vec3f* tonemap(Vec3f* pixelbuffer, int width, int height);
 

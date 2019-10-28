@@ -7,7 +7,7 @@
 #define CAMERA_H_
 
 #include "rapidjson/document.h"
-
+#include "math/geometry.h"
 
 using namespace rapidjson;
 
@@ -20,7 +20,9 @@ public:
 	// Constructors
 	//
 	Camera(){};
-	Camera(int height, int width, int fov):height(height), width(width), fov(fov){};
+	Camera(int height, int width, int fov):height(height), width(width){
+		this->setFov(fov);
+	};
 
 	//
 	// Destructor
@@ -47,17 +49,6 @@ public:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 	//
 	// Getters and Setters
 	//
@@ -77,6 +68,17 @@ public:
 		this->width = width;
 	}
 
+	int getFovDeg() const {
+		return (int)roundf(fov / (atanf(1) / 45.0f));
+	}
+
+	float getFov() const {
+		return fov;
+	}
+
+	void setFov(int fov) {
+		this->fov = fov * (atanf(1) / 45.0f);
+	}
 
 
 protected:
@@ -86,7 +88,7 @@ protected:
 	//
 	int height;
 	int width;
-	int fov; //field of view
+	float fov; //field of view
 
 };
 

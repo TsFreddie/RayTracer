@@ -14,11 +14,8 @@ namespace rt{
 	//
 	// Pinhole constructor (example)
 	//
-	Pinhole::Pinhole(int width, int height, int fov):Camera(width, height, fov){
-
-
-		// to fill
-
+	Pinhole::Pinhole(int width, int height, int fov):Camera(width, height, fov) {
+		
 	}
 
 
@@ -28,7 +25,7 @@ namespace rt{
 	 */
 	void Pinhole::printCamera(){
 		printf("I am a pinhole camera! \n");
-		printf("width: %dpx, height: %dpx, fov:%d \n", width, height, fov);
+		printf("width: %dpx, height: %dpx, fov:%d \n", width, height, getFovDeg());
 	}
 
 

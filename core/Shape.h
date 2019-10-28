@@ -20,7 +20,7 @@ public:
 	//
 	// Constructors
 	//
-	Shape();
+	Shape() {};
 
 	//
 	// Destructor (must be overriden in subclass)

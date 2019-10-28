@@ -6,7 +6,6 @@
 #define CORE_RAYHITSTRUCTS_H_
 
 #include "math/geometry.h"
-#include "core/Material.h"
 
 namespace rt{
 
@@ -15,18 +14,19 @@ namespace rt{
  */
 enum RayType {PRIMARY, SECONDARY, SHADOW};
 
-struct Ray {
+typedef struct _ray {
 	RayType raytype;
 	Vec3f origin;
 	Vec3f direction;
-};
+} Ray;
 
 
-struct Hit {
+class Material;
+typedef struct _hit {
 	Vec3f point;
 	float distance;
 	Material *mat;
-};
+} Hit;
 
 }
 

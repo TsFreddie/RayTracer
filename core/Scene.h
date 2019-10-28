@@ -25,8 +25,11 @@ public:
 	Scene(){};
 
 	void createScene(Value& scenespecs);
-	std::vector<Shape*>::iterator itShapeBegin();
-	std::vector<Shape*>::iterator itShapeEnd();
+	std::vector<Shape*>::iterator itShapeBegin() { return shapes.begin(); }
+	std::vector<Shape*>::iterator itShapeEnd() { return shapes.end(); }
+
+	std::vector<LightSource*>::iterator itLightBegin() { return lightSources.begin(); }
+	std::vector<LightSource*>::iterator itLightEnd() { return lightSources.end(); }
 
 	~Scene();
 

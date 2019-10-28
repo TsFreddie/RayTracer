@@ -45,14 +45,6 @@ void Scene::createScene(Value& sceneSpecs){
 	}
 }
 
-std::vector<Shape*>::iterator Scene::itShapeBegin() {
-	return shapes.begin();
-}
-
-std::vector<Shape*>::iterator Scene::itShapeEnd() {
-	return shapes.end();
-}
-
 Scene::~Scene() {
 	for (auto it = shapes.begin(); it != shapes.end(); ++it) {
 		delete *it;

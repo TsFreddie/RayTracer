@@ -25,11 +25,7 @@ public:
 
 	virtual ~Sphere();
 
-
-	//
-	// Functions that need to be implemented, since Sphere is a subclass of Shape
-	//
-	Hit intersect(Ray ray);
+	bool intersect(Ray ray, Hit& hit);
 
 private:
 

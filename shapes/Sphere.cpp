@@ -17,18 +17,39 @@ namespace rt{
 	 * @return hit struct containing intersection information
 	 *
 	 */
-	Hit Sphere::intersect(Ray ray){
+	bool Sphere::intersect(Ray ray, Hit& hit){
 
 		Hit h;
-		//-----------to be implemented -------------
+		bool isHit = false;
+		Vec3f d = ray.origin - center;
+		Vec3f dl = (ray.direction * d);
 
+		float bHalf = dl.x + dl.y + dl.z;
 
-		return h;
+		float c = powf(d.length(), 2) - powf(radius, 2);
 
+		float delta = pow(bHalf, 2) - c;
+		
+		if (delta < 0) 
+			return false;
+
+		float distance;
+		if (delta == 0) {
+			distance = -bHalf;
+		} else {
+			float sqrtD = sqrt(delta);
+			if (-bHalf > sqrtD) {
+				distance = -bHalf - sqrtD;
+			} else {
+				distance = -bHalf + sqrtD;
+			}
+		}
+
+		hit.mat = this->material;
+		hit.distance = distance;
+		hit.point = ray.origin + ray.direction * distance;
+		return true;
 	}
-
-
-
 } //namespace rt
 
 

@@ -5,6 +5,7 @@
 #ifndef RAYTRACER_H_
 #define RAYTRACER_H_
 
+#include "core/RayHitStructs.h"
 #include "math/geometry.h"
 #include "core/Camera.h"
 #include "core/Scene.h"
@@ -22,6 +23,7 @@ public:
 	RayTracer();
 
 	static Ray primRay(Camera* camera, int x, int y);
+	static Ray shadowRay(Hit hit, Vec3f lightPos);
 	static Vec3f* render(Camera* camera, Scene* scene, int nbounces);
 	static Vec3f* tonemap(Vec3f* pixelbuffer, int width, int height);
 

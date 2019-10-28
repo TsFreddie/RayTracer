@@ -20,12 +20,11 @@ typedef struct _ray {
 	Vec3f direction;
 } Ray;
 
-
-class Material;
+class Shape;
 typedef struct _hit {
 	Vec3f point;
 	float distance;
-	Material *mat;
+	Shape* shape;
 } Hit;
 
 }

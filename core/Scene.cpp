@@ -30,6 +30,15 @@ void Scene::createScene(Value& sceneSpecs){
 	}
 
 	// Populate lightsources
+	if (sceneSpecs.HasMember("lightsources") && sceneSpecs["lightsources"].IsArray()) {
+		Value& lightSpecs = sceneSpecs["lightsources"];
+		SizeType nlights = lightSpecs.Size();
+		for (SizeType i = 0; i < nlights; i++) {
+			Value& curLightSpec = lightSpecs[i];
+			LightSource* newLight = LightSource::createLight(curLightSpec);
+			if (newLight != NULL) lightSources.push_back(newLight);
+		}
+	}
 
 	// Set background color
 	if (sceneSpecs.HasMember("backgroundcolor") &&

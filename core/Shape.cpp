@@ -15,7 +15,7 @@ namespace rt{
         Shape* newShape = NULL;
         if (shapeType.compare("sphere") == 0) {
             if (!shapeSpec.HasMember("center") || !shapeSpec["center"].IsArray() ||
-                shapeSpec["center"].Size() != 3 ||
+                shapeSpec["center"].Size() < 3 ||
                 !shapeSpec.HasMember("radius") || !shapeSpec["radius"].IsFloat()) {
 
                 return NULL;

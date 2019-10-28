@@ -31,6 +31,16 @@ Ray RayTracer::primRay(Camera* camera, int x, int y) {
 	return ray;
 }
 
+Ray RayTracer::shadowRay(Hit hit, Vec3f lightPos) {
+	Ray ray;
+	ray.raytype = SHADOW;
+
+	ray.direction = (lightPos - hit.point).normalize();
+	ray.origin = hit.point;
+
+	return ray;
+}
+
 /**
  * Performs ray tracing to render a photorealistic scene
  *
@@ -52,20 +62,55 @@ Vec3f* RayTracer::render(Camera* camera, Scene* scene, int nbounces){
 			
 			Hit minHit;
 			minHit.distance = INFINITY;
-			minHit.mat = NULL;
+			minHit.shape = NULL;
 
 			for (auto it = scene->itShapeBegin(); it != scene->itShapeEnd(); ++it) {
 				auto shape = *it;
 				Hit hit;
 
-				if (shape->intersect(pr, hit) && hit.distance < minHit.distance) {
+				if (shape->intersect(pr, &hit) && hit.distance < minHit.distance) {
 					minHit = hit;
 				}
 			}
 
-			if (minHit.mat != NULL) {
-				pixelbuffer[y*width+x] = minHit.mat->Shade(scene, minHit);
+			if (minHit.shape == NULL) {
+				pixelbuffer[y*width+x] = scene->getBackgroundColor();
+				continue;
 			}
+
+			bool inShadow = false;
+			Shape* by;
+			Vec3f intensity(0,0,0);
+			for (auto it = scene->itLightBegin(); it != scene->itLightEnd(); ++it) {
+				auto light = *it;
+				Ray sr = shadowRay(minHit, light->getPosition());
+				for (auto it = scene->itShapeBegin(); it != scene->itShapeEnd(); ++it) {
+					auto shape = *it;
+
+					if (minHit.shape == shape) {
+						continue;
+					}
+	
+					if (shape->intersect(sr, NULL)) {
+						inShadow = true;
+						by = shape;
+						break;
+					}
+				}
+				if (inShadow) {
+					break;
+				}
+
+				intensity = intensity + light->getIntensity();
+			}
+
+			if (inShadow) {
+				pixelbuffer[y*width+x] = by->getMaterial()->Shade(scene, minHit);
+			} else {
+				pixelbuffer[y*width+x] = minHit.shape->getMaterial()->Shade(scene, minHit) * intensity;
+			}
+			
+
 		}
 	}
 

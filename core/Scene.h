@@ -31,6 +31,8 @@ public:
 	std::vector<LightSource*>::iterator itLightBegin() { return lightSources.begin(); }
 	std::vector<LightSource*>::iterator itLightEnd() { return lightSources.end(); }
 
+	Vec3f getBackgroundColor() { return backgroundColor; }
+
 	~Scene();
 
 private:

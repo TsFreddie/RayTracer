@@ -30,9 +30,10 @@ public:
 	//
 	// Shape abstract methods (to be implemented by subclasses)
 	//
-	virtual bool intersect(Ray, Hit&)=0;
+	virtual bool intersect(Ray, Hit*)=0;
 
 	static Shape* createShape(Value& shapeSpec);
+	Material* getMaterial() { return material; }
 
 
 protected:

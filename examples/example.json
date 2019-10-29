@@ -21,9 +21,9 @@
 					0.08654
 				],
 				"intensity": [
-					1.0,
-					1.0,
-					1.0
+					20,
+					20,
+					20
 				]
 			}
 		],
@@ -39,7 +39,7 @@
 				"material": {
 					"ks": 0.4,
 					"kd": 0.8,
-					"specularexponent": 3,
+					"specularexponent": 0.1,
 					"diffusecolor": [
 						1,
 						0,

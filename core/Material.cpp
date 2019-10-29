@@ -14,19 +14,19 @@ Material* Material::createMaterial(Value& matSpec) {
     float kd = 0;
     float specular = 0;
 
-    if (matSpec.HasMember("ka") && matSpec["ka"].IsFloat()) {
+    if (matSpec.HasMember("ka") && matSpec["ka"].IsNumber()) {
         ka = matSpec["ka"].GetFloat();
     }
     
-    if (matSpec.HasMember("ks") && matSpec["ks"].IsFloat()) {
+    if (matSpec.HasMember("ks") && matSpec["ks"].IsNumber()) {
         ks = matSpec["ks"].GetFloat();
     }
 
-    if (matSpec.HasMember("kd") && matSpec["kd"].IsFloat()) {
+    if (matSpec.HasMember("kd") && matSpec["kd"].IsNumber()) {
         kd = matSpec["kd"].GetFloat();
     }
 
-    if (matSpec["specularexponent"].IsFloat()) {
+    if (matSpec.HasMember("specularexponent") && matSpec["specularexponent"].IsNumber()) {
         specular = matSpec["specularexponent"].GetFloat();
     }
 

@@ -20,7 +20,7 @@ public:
     BlinnPhong();
     BlinnPhong(float ka, float ks, float kd, float specular);
     void setDiffuse(Vec3f color);
-    Vec3f Shade(Scene *scene, Hit hit);
+    Vec3f Shade(LightSource *light, Hit hit);
 
 private:
     float ka;

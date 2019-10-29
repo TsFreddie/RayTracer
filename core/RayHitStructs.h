@@ -23,6 +23,7 @@ typedef struct _ray {
 class Shape;
 typedef struct _hit {
 	Vec3f point;
+	Vec3f normal;
 	float distance;
 	Shape* shape;
 } Hit;

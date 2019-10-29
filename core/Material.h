@@ -14,16 +14,22 @@ using namespace rapidjson;
 
 namespace rt{
 
-class Scene;
+class LightSource;
 class Material{
 public:
 
     Material() {};
     virtual ~Material() {};
     static Material* createMaterial(Value& matSpec);
-    virtual Vec3f Shade(Scene *scene, Hit hit) { return Vec3f(1,0,1); };
+    virtual Vec3f Shade(LightSource *light, Hit hit) { return Vec3f(1,0,1); };
 
 private:
+
+    float transmit;
+    float specular;
+    float roughness; // glossiness
+    float metallic; // 
+
 };
 
 

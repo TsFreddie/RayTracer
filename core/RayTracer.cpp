@@ -42,7 +42,7 @@ Ray RayTracer::createShadowRay(Hit hit, Vec3f lightPos) {
 }
 
 Vec3f RayTracer::trace(Scene *scene, Ray ray, int nbounces) {
-	Vec3f color;
+	Vec3f color(0,0,0);
 	Hit minHit;
 	minHit.distance = INFINITY;
 	minHit.shape = NULL;
@@ -64,7 +64,7 @@ Vec3f RayTracer::trace(Scene *scene, Ray ray, int nbounces) {
 		}
 	}
 
-	// Compute illumination with shadows
+	// shadow
 	for(auto it = scene->itLightBegin(); it != scene->itLightEnd(); ++it) {
 		auto light = *it;
 		bool inShadow = false;
@@ -78,7 +78,7 @@ Vec3f RayTracer::trace(Scene *scene, Ray ray, int nbounces) {
 			}
 		}
 		if (!inShadow) {
-			color = color + minHit.shape->getMaterial()->Shade(scene, minHit);
+			color = color + minHit.shape->getMaterial()->Shade(light, minHit);
 		}
 	}
 	return color;

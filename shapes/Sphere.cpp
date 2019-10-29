@@ -58,7 +58,7 @@ namespace rt{
 		float c = oc.dotProduct(oc) - radius * radius;
 		float disc = b*b - 4*c;
 		if(disc < 0) return false;
-		
+
 		if (!hit) return true;
 
 		disc = sqrt(disc);
@@ -68,6 +68,7 @@ namespace rt{
 
 		hit->shape = this;
 		hit->point = ray.origin + (ray.direction * hit->distance);
+		hit->normal = (hit->point - center).normalize();
 		return true;
 	}
 

@@ -23,7 +23,7 @@ public:
 	Sphere();
 	Sphere(Vec3f center, float radius):center(center), radius(radius){};
 
-	bool intersect(Ray ray, Hit& hit);
+	bool intersect(Ray ray, Hit *hit);
 
 private:
 

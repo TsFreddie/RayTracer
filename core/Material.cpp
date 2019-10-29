@@ -9,15 +9,20 @@
 namespace rt{
 
 Material* Material::createMaterial(Value& matSpec) {
+    float ka = 0;
     float ks = 0;
     float kd = 0;
     float specular = 0;
+
+    if (matSpec.HasMember("ka") && matSpec["ka"].IsFloat()) {
+        ka = matSpec["ka"].GetFloat();
+    }
     
-    if (matSpec["ks"].IsFloat()) {
+    if (matSpec.HasMember("ks") && matSpec["ks"].IsFloat()) {
         ks = matSpec["ks"].GetFloat();
     }
 
-    if (matSpec["kd"].IsFloat()) {
+    if (matSpec.HasMember("kd") && matSpec["kd"].IsFloat()) {
         kd = matSpec["kd"].GetFloat();
     }
 
@@ -27,7 +32,7 @@ Material* Material::createMaterial(Value& matSpec) {
 
     // Currently only BlinnPhong
     // TODO: not a good factory, fix it.
-    BlinnPhong* newMat = new BlinnPhong(ks, kd, specular);
+    BlinnPhong* newMat = new BlinnPhong(ka, ks, kd, specular);
 
     if (matSpec["diffusecolor"].IsArray() && matSpec["diffusecolor"].Size() >= 3) {
         auto diffuse = matSpec["diffusecolor"].GetArray();

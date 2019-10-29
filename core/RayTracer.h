@@ -22,8 +22,11 @@ public:
 
 	RayTracer();
 
-	static Ray primRay(Camera* camera, int x, int y);
-	static Ray shadowRay(Hit hit, Vec3f lightPos);
+	static Ray createPrimRay(Camera* camera, int x, int y);
+	static Ray createShadowRay(Hit hit, Vec3f lightPos);
+	
+	static Vec3f trace(Scene *scene, Ray ray, int nbounce);
+
 	static Vec3f* render(Camera* camera, Scene* scene, int nbounces);
 	static Vec3f* tonemap(Vec3f* pixelbuffer, int width, int height);
 

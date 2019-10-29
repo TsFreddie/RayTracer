@@ -11,13 +11,15 @@
 namespace rt{
 
 BlinnPhong::BlinnPhong() {
+    this->ka = 0;
     this->ks = 0;
     this->kd = 0;
     this->specular = 0;
     this->diffuse = Vec3f(1,1,1);
 }
 
-BlinnPhong::BlinnPhong(float ks, float kd, float specular):BlinnPhong() {
+BlinnPhong::BlinnPhong(float ka, float ks, float kd, float specular): BlinnPhong() {
+    this->ka = ka;
     this->ks = ks;
     this->kd = kd;
     this->specular = specular;

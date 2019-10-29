@@ -9,7 +9,7 @@ namespace rt{
 
 
 // Calculate primary ray
-Ray RayTracer::primRay(Camera* camera, int x, int y) {
+Ray RayTracer::createPrimRay(Camera* camera, int x, int y) {
 	int width = camera->getWidth();
 	int height = camera->getHeight();
 	float fov = camera->getFov();
@@ -31,7 +31,7 @@ Ray RayTracer::primRay(Camera* camera, int x, int y) {
 	return ray;
 }
 
-Ray RayTracer::shadowRay(Hit hit, Vec3f lightPos) {
+Ray RayTracer::createShadowRay(Hit hit, Vec3f lightPos) {
 	Ray ray;
 	ray.raytype = SHADOW;
 
@@ -39,6 +39,49 @@ Ray RayTracer::shadowRay(Hit hit, Vec3f lightPos) {
 	ray.origin = hit.point;
 
 	return ray;
+}
+
+Vec3f RayTracer::trace(Scene *scene, Ray ray, int nbounces) {
+	Vec3f color;
+	Hit minHit;
+	minHit.distance = INFINITY;
+	minHit.shape = NULL;
+	for (auto it = scene->itShapeBegin(); it != scene->itShapeEnd(); ++it) {
+		auto shape = *it;
+		Hit hit;
+		if (shape->intersect(ray, &hit)) {
+			if (hit.distance < minHit.distance) {
+				minHit = hit;
+			}
+		}
+	}
+
+	if (minHit.shape == NULL) {
+		if (ray.raytype == PRIMARY) {
+			return scene->getBackgroundColor();
+		} else {
+			return Vec3f(0,0,0);
+		}
+	}
+
+	// Compute illumination with shadows
+	for(auto it = scene->itLightBegin(); it != scene->itLightEnd(); ++it) {
+		auto light = *it;
+		bool inShadow = false;
+		Ray shadowRay = createShadowRay(minHit, light->getPosition());
+
+		for (auto it = scene->itShapeBegin(); it != scene->itShapeEnd(); ++it) {
+			auto shape = *it;
+			if (shape->intersect(shadowRay, NULL)) {
+				inShadow = true;
+				break;
+			}
+		}
+		if (!inShadow) {
+			color = color + minHit.shape->getMaterial()->Shade(scene, minHit);
+		}
+	}
+	return color;
 }
 
 /**
@@ -58,57 +101,57 @@ Vec3f* RayTracer::render(Camera* camera, Scene* scene, int nbounces){
 
 	for (int y = 0; y < height; ++y) {
 		for (int x = 0; x < width; ++x) {
-			Ray pr = primRay(camera, x, y);
-			
-			Hit minHit;
-			minHit.distance = INFINITY;
-			minHit.shape = NULL;
+			Ray pr = createPrimRay(camera, x, y);
+			pixelbuffer[y*width+x] = trace(scene, pr, nbounces);
+			// Hit minHit;
+			// minHit.distance = INFINITY;
+			// minHit.shape = NULL;
 
-			for (auto it = scene->itShapeBegin(); it != scene->itShapeEnd(); ++it) {
-				auto shape = *it;
-				Hit hit;
+			// for (auto it = scene->itShapeBegin(); it != scene->itShapeEnd(); ++it) {
+			// 	auto shape = *it;
+			// 	Hit hit;
 
-				if (shape->intersect(pr, &hit) && hit.distance < minHit.distance) {
-					minHit = hit;
-				}
-			}
+			// 	if (shape->intersect(pr, &hit) && hit.distance < minHit.distance) {
+			// 		minHit = hit;
+			// 	}
+			// }
 
-			if (minHit.shape == NULL) {
-				pixelbuffer[y*width+x] = scene->getBackgroundColor();
-				continue;
-			}
+			// if (minHit.shape == NULL) {
+			// 	pixelbuffer[y*width+x] = scene->getBackgroundColor();
+			// 	continue;
+			// }
 
-			bool inShadow = false;
-			Shape* by;
-			Vec3f intensity(0,0,0);
-			for (auto it = scene->itLightBegin(); it != scene->itLightEnd(); ++it) {
-				auto light = *it;
-				Ray sr = shadowRay(minHit, light->getPosition());
-				for (auto it = scene->itShapeBegin(); it != scene->itShapeEnd(); ++it) {
-					auto shape = *it;
+			// bool inShadow = false;
+			// Shape* by;
+			// Vec3f intensity(0,0,0);
+			// for (auto it = scene->itLightBegin(); it != scene->itLightEnd(); ++it) {
+			// 	auto light = *it;
+			// 	Ray sr = shadowRay(minHit, light->getPosition());
+			// 	for (auto it = scene->itShapeBegin(); it != scene->itShapeEnd(); ++it) {
+			// 		auto shape = *it;
 
-					if (minHit.shape == shape) {
-						continue;
-					}
+			// 		if (minHit.shape == shape) {
+			// 			continue;
+			// 		}
 	
-					if (shape->intersect(sr, NULL)) {
-						inShadow = true;
-						by = shape;
-						break;
-					}
-				}
-				if (inShadow) {
-					break;
-				}
+			// 		if (shape->intersect(sr, NULL)) {
+			// 			inShadow = true;
+			// 			by = shape;
+			// 			break;
+			// 		}
+			// 	}
+			// 	if (inShadow) {
+			// 		break;
+			// 	}
 
-				intensity = intensity + light->getIntensity();
-			}
+			// 	intensity = intensity + light->getIntensity();
+			// }
 
-			if (inShadow) {
-				pixelbuffer[y*width+x] = by->getMaterial()->Shade(scene, minHit);
-			} else {
-				pixelbuffer[y*width+x] = minHit.shape->getMaterial()->Shade(scene, minHit) * intensity;
-			}
+			// if (inShadow) {
+			// 	pixelbuffer[y*width+x] = by->getMaterial()->Shade(scene, minHit);
+			// } else {
+			// 	pixelbuffer[y*width+x] = minHit.shape->getMaterial()->Shade(scene, minHit) * intensity;
+			// }
 			
 
 		}

@@ -28,7 +28,7 @@ namespace rt{
 	 */
 	void ThinLens::printCamera(){
 		printf("I am a thin lens camera! \n");
-		printf("width: %dpx, height: %dpx, fov:%d \n", width, height, fov);
+		printf("width: %dpx, height: %dpx, fov:%d \n", width, height, getFovDeg());
 	}
 
 } //namespace rt

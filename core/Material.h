@@ -18,17 +18,19 @@ class LightSource;
 class Material{
 public:
 
-    Material() {};
+    Material();
     virtual ~Material() {};
     static Material* createMaterial(Value& matSpec);
     virtual Vec3f Shade(LightSource *light, Hit hit) { return Vec3f(1,0,1); };
 
-private:
+    float getTransmit() { return transmit; }
+    float getRoughness() { return roughness; }
+    float getMetallic() { return metallic; }
 
-    float transmit;
-    float specular;
+private:
+    float transmit; // transparency
     float roughness; // glossiness
-    float metallic; // 
+    float metallic; // reflectivity
 
 };
 

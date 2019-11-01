@@ -6,12 +6,13 @@
 
 #include "BlinnPhong.h"
 #include "core/LightSource.h"
+#include <windows.h>
 
 
 
 namespace rt{
 
-BlinnPhong::BlinnPhong() {
+BlinnPhong::BlinnPhong(): Material() {
     this->ka = 0;
     this->ks = 0;
     this->kd = 0;
@@ -32,12 +33,12 @@ void BlinnPhong::setDiffuse(Vec3f color) {
 
 Vec3f BlinnPhong::Shade(LightSource *light, Hit hit) {
     // TODO: camera transformation
-    Vec3f view = (Vec3f(0,0,0)-hit.point).normalize();
+    Vec3f view = hit.view;
     Vec3f normal = hit.normal;
     Vec3f L = (light->getPosition() - hit.point).normalize();
     
     float NL = normal.dotProduct(L);
-    float intensity = NL > .0f ? NL : .0f;
+    float intensity = (NL > 0.0f) ? NL : 0.0f;
 
     Vec3f color = diffuse * light->getIntensity() * intensity;
 
@@ -45,13 +46,11 @@ Vec3f BlinnPhong::Shade(LightSource *light, Hit hit) {
 
     float NH = normal.dotProduct(H);
 
-    float s = NH > .0f ? NH : .0f;
-
-    float spec = pow (s, specular);
+    float spec = powf((NH > 0.0f) ? NH : 0.0f, specular);
 
     Vec3f specColor = light->getIntensity() * spec;
 
-    return color * kd + specColor * ks;
+    return color * kd + specColor * ks; 
 }
 
 } //namespace rt

@@ -6,6 +6,9 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
+// PI on windows
+#define W_PI 3.141592741f
+
 #include "rapidjson/document.h"
 #include "math/geometry.h"
 
@@ -69,7 +72,7 @@ public:
 	}
 
 	int getFovDeg() const {
-		return (int)roundf(fov / (atanf(1) / 45.0f));
+		return (int)roundf(fov * 180.0f / W_PI * 2);
 	}
 
 	float getFov() const {
@@ -77,7 +80,7 @@ public:
 	}
 
 	void setFov(int fov) {
-		this->fov = fov * (atanf(1) / 45.0f);
+		this->fov = 0.5f * fov * W_PI / 180.0f;
 	}
 
 

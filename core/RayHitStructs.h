@@ -24,6 +24,7 @@ class Shape;
 typedef struct _hit {
 	Vec3f point;
 	Vec3f normal;
+	Vec3f view;
 	float distance;
 	Shape* shape;
 } Hit;

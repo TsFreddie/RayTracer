@@ -12,23 +12,23 @@ namespace rt{
 Ray RayTracer::createPrimRay(Camera* camera, int x, int y) {
 	int width = camera->getWidth();
 	int height = camera->getHeight();
-	float fov = camera->getFov();
+	double fov = camera->getFov();
 
-	float ratio = width / (float)height;
+	double ratio = width / (double)height;
 
 	Ray ray;
 	ray.raytype = PRIMARY;
-	ray.origin = Vec3f(0,0,0); // TODO: give camera position & look at
+	ray.origin = Vec3d(0,0,0); // TODO: give camera position & look at
 
-	float rx = (2*((x + 0.5f) / (float) width)-1) * tan(fov) * ratio;
-	float ry = (1-2*((y + 0.5f) / (float) height)) * tan(fov);
+	double rx = (2*((x + 0.5) / (double) width)-1) * tan(fov) * ratio;
+	double ry = (1-2*((y + 0.5) / (double) height)) * tan(fov);
 
-	ray.direction = Vec3f(rx, ry, 1).normalize();
+	ray.direction = Vec3d(rx, ry, 1).normalize();
 
 	return ray;
 }
 
-Ray RayTracer::createShadowRay(Hit hit, Vec3f lightPos) {
+Ray RayTracer::createShadowRay(Hit hit, Vec3d lightPos) {
 	Ray ray;
 	ray.raytype = SHADOW;
 	ray.direction = (lightPos - hit.point).normalize();
@@ -37,7 +37,7 @@ Ray RayTracer::createShadowRay(Hit hit, Vec3f lightPos) {
 	return ray;
 }
 
-Vec3f RayTracer::traceRay(Scene *scene, Ray ray, int nbounces) {
+Vec3d RayTracer::traceRay(Scene *scene, Ray ray, int nbounces) {
 	Hit minHit;
 	minHit.distance = INFINITY;
 	minHit.shape = NULL;
@@ -56,12 +56,12 @@ Vec3f RayTracer::traceRay(Scene *scene, Ray ray, int nbounces) {
 		if (ray.raytype == PRIMARY) {
 			return scene->getBackgroundColor();
 		} else {
-			return Vec3f(0,0,0);
+			return Vec3d(0,0,0);
 		}
 	}
 
 	// TODO: add ambient
-	Vec3f color(0,0,0);
+	Vec3d color(0,0,0);
 
 	// Lights
 	for(auto it = scene->itLightBegin(); it != scene->itLightEnd(); ++it) {
@@ -70,7 +70,7 @@ Vec3f RayTracer::traceRay(Scene *scene, Ray ray, int nbounces) {
 		bool inShadow = false;
 		Ray shadowRay;
 		shadowRay.direction = (light->getPosition() - minHit.point).normalize();
-		shadowRay.origin = minHit.point + minHit.normal * 1e-4f;
+		shadowRay.origin = minHit.point + minHit.normal * 1e-4;
 
 		for (auto it2 = scene->itShapeBegin(); it2 != scene->itShapeEnd(); ++it2) {
 			auto shape = *it2;
@@ -96,11 +96,11 @@ Vec3f RayTracer::traceRay(Scene *scene, Ray ray, int nbounces) {
  *
  * @return a pixel buffer containing pixel values in linear RGB format
  */
-Vec3f* RayTracer::render(Camera* camera, Scene* scene, int nbounces){
+Vec3d* RayTracer::render(Camera* camera, Scene* scene, int nbounces){
 
 	int width = camera->getWidth();
 	int height = camera->getHeight();
-	Vec3f* pixelbuffer = new Vec3f[width * height];
+	Vec3d* pixelbuffer = new Vec3d[width * height];
 
 	for (int y = 0; y < height; ++y) {
 		for (int x = 0; x < width; ++x) {
@@ -120,11 +120,11 @@ Vec3f* RayTracer::render(Camera* camera, Scene* scene, int nbounces){
  *
  * @return the tonemapped image
  */
-Vec3f* RayTracer::tonemap(Vec3f* pixelbuffer, int width, int height){
+Vec3d* RayTracer::tonemap(Vec3d* pixelbuffer, int width, int height){
 
 	for (int y = 0; y < height; ++y) {
 		for (int x = 0; x < width; ++x) {
-			Vec3f color = pixelbuffer[y*width+x] * 255;
+			Vec3d color = pixelbuffer[y*width+x] * 255;
 			if (color.x > 255) color.x = 255;
 			if (color.x < 0) color.x = 0;
 			if (color.y > 255) color.y = 255;

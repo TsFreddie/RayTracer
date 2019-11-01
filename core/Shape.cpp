@@ -21,8 +21,8 @@ namespace rt{
                 return NULL;
             }
             auto center = shapeSpec["center"].GetArray();
-            float radius = shapeSpec["radius"].GetFloat();
-            newShape = new Sphere(Vec3f(center[0].GetFloat(), center[1].GetFloat(), center[2].GetFloat()), radius);
+            double radius = shapeSpec["radius"].GetFloat();
+            newShape = new Sphere(Vec3d(center[0].GetFloat(), center[1].GetFloat(), center[2].GetFloat()), radius);
         }
 
         if (newShape) {

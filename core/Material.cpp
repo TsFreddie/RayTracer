@@ -9,17 +9,17 @@
 namespace rt{
 
     Material::Material() {
-        transmit = 0.0f;
-        metallic = 0.5f;
-        roughness = 0.0f;
+        transmit = 0.0;
+        metallic = 0.5;
+        roughness = 0.0;
     }
 
     Material* Material::createMaterial(Value& matSpec) {
 
-        float ka = 0;
-        float ks = 0;
-        float kd = 0;
-        float specular = 0;
+        double ka = 0;
+        double ks = 0;
+        double kd = 0;
+        double specular = 0;
 
         if (matSpec.HasMember("ka") && matSpec["ka"].IsNumber()) {
             ka= matSpec["ka"].GetFloat();
@@ -42,7 +42,7 @@ namespace rt{
 
         if (matSpec["diffusecolor"].IsArray() && matSpec["diffusecolor"].Size() >= 3) {
             auto diffuse = matSpec["diffusecolor"].GetArray();
-            newMat->setDiffuse(Vec3f(diffuse[0].GetFloat(), diffuse[1].GetFloat(), diffuse[2].GetFloat()));
+            newMat->setDiffuse(Vec3d(diffuse[0].GetFloat(), diffuse[1].GetFloat(), diffuse[2].GetFloat()));
         }
 
         if (matSpec.HasMember("metallic") && matSpec["metallic"].IsNumber()) {

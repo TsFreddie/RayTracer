@@ -16,16 +16,16 @@ enum RayType {PRIMARY, SECONDARY, SHADOW};
 
 typedef struct _ray {
 	RayType raytype;
-	Vec3f origin;
-	Vec3f direction;
+	Vec3d origin;
+	Vec3d direction;
 } Ray;
 
 class Shape;
 typedef struct _hit {
-	Vec3f point;
-	Vec3f normal;
-	Vec3f view;
-	float distance;
+	Vec3d point;
+	Vec3d normal;
+	Vec3d view;
+	double distance;
 	Shape* shape;
 } Hit;
 

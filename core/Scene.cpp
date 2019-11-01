@@ -46,11 +46,11 @@ void Scene::createScene(Value& sceneSpecs){
 		sceneSpecs["backgroundcolor"].Size() >= 3) {
 		
 		Value& bcSpecs = sceneSpecs["backgroundcolor"];
-		backgroundColor = Vec3f(bcSpecs[0].GetFloat(), 
+		backgroundColor = Vec3d(bcSpecs[0].GetFloat(), 
 								bcSpecs[1].GetFloat(),
 								bcSpecs[2].GetFloat());
 	} else {
-		backgroundColor = Vec3f(0,0,0);
+		backgroundColor = Vec3d(0,0,0);
 	}
 }
 

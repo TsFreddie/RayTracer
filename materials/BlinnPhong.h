@@ -18,16 +18,16 @@ class BlinnPhong: public Material{
 
 public:
     BlinnPhong();
-    BlinnPhong(float ka, float ks, float kd, float specular);
-    void setDiffuse(Vec3f color);
-    Vec3f Shade(LightSource *light, Hit hit);
+    BlinnPhong(double ka, double ks, double kd, double specular);
+    void setDiffuse(Vec3d color);
+    Vec3d Shade(LightSource *light, Hit hit);
 
 private:
-    float ka;
-    float ks;
-    float kd;
-    float specular;
-    Vec3f diffuse;
+    double ka;
+    double ks;
+    double kd;
+    double specular;
+    Vec3d diffuse;
 };
 
 

@@ -21,14 +21,14 @@ public:
 	// Constructors
 	//
 	Sphere();
-	Sphere(Vec3f center, float radius):center(center), radius(radius){};
+	Sphere(Vec3d center, double radius):center(center), radius(radius){};
 
 	bool intersect(Ray ray, Hit *hit);
 
 private:
 
-	Vec3f center;
-	float radius;
+	Vec3d center;
+	double radius;
 
 };
 

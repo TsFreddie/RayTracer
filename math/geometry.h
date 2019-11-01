@@ -143,6 +143,7 @@ public:
 // Now you can specialize the class. We are just showing two examples here. In your code
 // you can declare a vector either that way: Vec3<float> a, or that way: Vec3f a
 //[/comment]
+typedef Vec3<double> Vec3d;
 typedef Vec3<float> Vec3f;
 typedef Vec3<int> Vec3i;
 

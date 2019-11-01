@@ -2,8 +2,8 @@
 	"nbounces": 3,
 	"camera": {
 		"type": "pinhole",
-		"width": 800,
-		"height": 800,
+		"width": 50,
+		"height": 50,
 		"fov": 35
 	},
 	"scene": {
@@ -44,44 +44,6 @@
 						1,
 						0,
 						0
-					]
-				}
-			},
-			{
-				"type": "sphere",
-				"center": [
-					0.2,
-					0.3,
-					2
-				],
-				"radius": 0.1,
-				"material": {
-					"ks": 0.4,
-					"kd": 0.8,
-					"specularexponent": 3,
-					"diffusecolor": [
-						0,
-						1,
-						0
-					]
-				}
-			},
-			{
-				"type": "sphere",
-				"center": [
-					0.2,
-					-0.3,
-					1.5
-				],
-				"radius": 0.1,
-				"material": {
-					"ks": 0.4,
-					"kd": 0.8,
-					"specularexponent": 3,
-					"diffusecolor": [
-						0,
-						0,
-						1
 					]
 				}
 			}

@@ -52,7 +52,7 @@ int main(int argc, char* argv[]){
 	//
 	// Main function, render scene
 	//
-	Vec3f* pixelbuffer=RayTracer::render(camera, scene, d["nbounces"].GetInt());
+	Vec3d* pixelbuffer=RayTracer::render(camera, scene, d["nbounces"].GetInt());
 
 
 

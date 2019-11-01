@@ -9,7 +9,7 @@
 
 namespace rt{
 
-    PointLight::PointLight(Vec3f position, Vec3f intensity):LightSource(position, intensity) {
+    PointLight::PointLight(Vec3d position, Vec3d intensity):LightSource(position, intensity) {
     
     }
 

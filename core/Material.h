@@ -21,16 +21,16 @@ public:
     Material();
     virtual ~Material() {};
     static Material* createMaterial(Value& matSpec);
-    virtual Vec3f Shade(LightSource *light, Hit hit) { return Vec3f(1,0,1); };
+    virtual Vec3d Shade(LightSource *light, Hit hit) { return Vec3d(1,0,1); };
 
-    float getTransmit() { return transmit; }
-    float getRoughness() { return roughness; }
-    float getMetallic() { return metallic; }
+    double getTransmit() { return transmit; }
+    double getRoughness() { return roughness; }
+    double getMetallic() { return metallic; }
 
 private:
-    float transmit; // transparency
-    float roughness; // glossiness
-    float metallic; // reflectivity
+    double transmit; // transparency
+    double roughness; // glossiness
+    double metallic; // reflectivity
 
 };
 

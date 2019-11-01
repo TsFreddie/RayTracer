@@ -15,19 +15,19 @@ namespace rt{
 class LightSource{
 public:
 
-    LightSource(Vec3f position, Vec3f intensity);
+    LightSource(Vec3d position, Vec3d intensity);
 
     virtual ~LightSource() {};
 
     static LightSource* createLight(Value& lightSpec);
 
-    Vec3f getPosition() { return position; };
-    Vec3f getIntensity() { return intensity; }
+    Vec3d getPosition() { return position; };
+    Vec3d getIntensity() { return intensity; }
 
 private:
 
-    Vec3f position;
-    Vec3f intensity;
+    Vec3d position;
+    Vec3d intensity;
 
 };
 

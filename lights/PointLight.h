@@ -16,7 +16,7 @@ namespace rt{
 class PointLight: public LightSource{
 
 public:
-    PointLight(Vec3f position, Vec3f intensity);
+    PointLight(Vec3d position, Vec3d intensity);
 private:
 
 };

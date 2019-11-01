@@ -7,7 +7,7 @@
 #define CAMERA_H_
 
 // PI on windows
-#define W_PI 3.141592741f
+#define W_PI 3.1415926535897
 
 #include "rapidjson/document.h"
 #include "math/geometry.h"
@@ -72,15 +72,15 @@ public:
 	}
 
 	int getFovDeg() const {
-		return (int)roundf(fov * 180.0f / W_PI * 2);
+		return (int)round(fov * 180.0 / W_PI * 2);
 	}
 
-	float getFov() const {
+	double getFov() const {
 		return fov;
 	}
 
 	void setFov(int fov) {
-		this->fov = 0.5f * fov * W_PI / 180.0f;
+		this->fov = 0.5 * fov * W_PI / 180.0;
 	}
 
 
@@ -91,7 +91,7 @@ protected:
 	//
 	int height;
 	int width;
-	float fov; //field of view
+	double fov; //field of view
 
 };
 

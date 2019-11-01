@@ -7,7 +7,7 @@
 
 namespace rt{
 
-    LightSource::LightSource(Vec3f position, Vec3f intensity) {
+    LightSource::LightSource(Vec3d position, Vec3d intensity) {
         this->position = position;
         this->intensity = intensity;
     }
@@ -28,12 +28,12 @@ namespace rt{
             auto position = lightSpec["position"].GetArray();
             auto intensity = lightSpec["intensity"].GetArray();
             newLight = new PointLight(
-                Vec3f(
+                Vec3d(
                     position[0].GetFloat(),
                     position[1].GetFloat(),
                     position[2].GetFloat()
                 ),
-                Vec3f(
+                Vec3d(
                     intensity[0].GetFloat(),
                     intensity[1].GetFloat(),
                     intensity[2].GetFloat()

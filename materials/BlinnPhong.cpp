@@ -17,38 +17,38 @@ BlinnPhong::BlinnPhong(): Material() {
     this->ks = 0;
     this->kd = 0;
     this->specular = 0;
-    this->diffuse = Vec3f(1,1,1);
+    this->diffuse = Vec3d(1,1,1);
 }
 
-BlinnPhong::BlinnPhong(float ka, float ks, float kd, float specular): BlinnPhong() {
+BlinnPhong::BlinnPhong(double ka, double ks, double kd, double specular): BlinnPhong() {
     this->ka = ka;
     this->ks = ks;
     this->kd = kd;
     this->specular = specular;
 }
 
-void BlinnPhong::setDiffuse(Vec3f color) {
+void BlinnPhong::setDiffuse(Vec3d color) {
     this->diffuse = color;
 }
 
-Vec3f BlinnPhong::Shade(LightSource *light, Hit hit) {
+Vec3d BlinnPhong::Shade(LightSource *light, Hit hit) {
     // TODO: camera transformation
-    Vec3f view = hit.view;
-    Vec3f normal = hit.normal;
-    Vec3f L = (light->getPosition() - hit.point).normalize();
+    Vec3d view = hit.view;
+    Vec3d normal = hit.normal;
+    Vec3d L = (light->getPosition() - hit.point).normalize();
     
-    float NL = normal.dotProduct(L);
-    float intensity = (NL > 0.0f) ? NL : 0.0f;
+    double NL = normal.dotProduct(L);
+    double intensity = (NL > 0.0) ? NL : 0.0;
 
-    Vec3f color = diffuse * light->getIntensity() * intensity;
+    Vec3d color = diffuse * light->getIntensity() * intensity;
 
-    Vec3f H = (L + view).normalize();
+    Vec3d H = (L + view).normalize();
 
-    float NH = normal.dotProduct(H);
+    double NH = normal.dotProduct(H);
 
-    float spec = powf((NH > 0.0f) ? NH : 0.0f, specular);
+    double spec = pow((NH > 0.0) ? NH : 0.0, specular);
 
-    Vec3f specColor = light->getIntensity() * spec;
+    Vec3d specColor = light->getIntensity() * spec;
 
     return color * kd + specColor * ks; 
 }

@@ -70,7 +70,7 @@ Vec3d RayTracer::traceRay(Scene *scene, Ray ray, int nbounces) {
 		bool inShadow = false;
 		Ray shadowRay;
 		shadowRay.direction = (light->getPosition() - minHit.point).normalize();
-		shadowRay.origin = minHit.point + minHit.normal * 1e-4;
+		shadowRay.origin = minHit.point;
 
 		for (auto it2 = scene->itShapeBegin(); it2 != scene->itShapeEnd(); ++it2) {
 			auto shape = *it2;

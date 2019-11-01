@@ -6,9 +6,6 @@
 
 #include "BlinnPhong.h"
 #include "core/LightSource.h"
-#include <windows.h>
-
-
 
 namespace rt{
 

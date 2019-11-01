@@ -46,4 +46,4 @@ namespace PPMWriter{
 
 
 
-#endif /* PMMWRITER_H_ */
+#endif

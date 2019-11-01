@@ -23,4 +23,4 @@ class TriMesh: public Shape{
 
 
 
-#endif /* TRIMESH_H_ */
+#endif

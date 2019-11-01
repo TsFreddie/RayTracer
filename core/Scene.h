@@ -14,37 +14,35 @@
 #include "core/Shape.h"
 #include "math/geometry.h"
 
-
 using namespace rapidjson;
 
-namespace rt{
+namespace rt {
 
 class Scene {
-public:
+   public:
+    Scene(){};
 
-	Scene(){};
+    void createScene(Value& scenespecs);
+    std::vector<Shape*>::iterator itShapeBegin() { return shapes.begin(); }
+    std::vector<Shape*>::iterator itShapeEnd() { return shapes.end(); }
 
-	void createScene(Value& scenespecs);
-	std::vector<Shape*>::iterator itShapeBegin() { return shapes.begin(); }
-	std::vector<Shape*>::iterator itShapeEnd() { return shapes.end(); }
+    std::vector<LightSource*>::iterator itLightBegin() {
+        return lightSources.begin();
+    }
+    std::vector<LightSource*>::iterator itLightEnd() {
+        return lightSources.end();
+    }
 
-	std::vector<LightSource*>::iterator itLightBegin() { return lightSources.begin(); }
-	std::vector<LightSource*>::iterator itLightEnd() { return lightSources.end(); }
+    Vec3d getBackgroundColor() { return backgroundColor; }
 
-	Vec3d getBackgroundColor() { return backgroundColor; }
+    ~Scene();
 
-	~Scene();
-
-private:
-
-	std::vector<LightSource*> lightSources;
-	std::vector<Shape*> shapes;
-	Vec3d backgroundColor;
-
+   private:
+    std::vector<LightSource*> lightSources;
+    std::vector<Shape*> shapes;
+    Vec3d backgroundColor;
 };
 
-} //namespace rt
+}  
 
-
-
-#endif /* SCENE_H_ */
+#endif

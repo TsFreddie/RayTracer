@@ -16,7 +16,7 @@
 			{
 				"type": "pointlight",
 				"position": [
-					-0.198535,
+					-0.2,
 					0.233844,
 					0.08654
 				],
@@ -58,7 +58,7 @@
 				"material": {
 					"ks": 0.4,
 					"kd": 0.8,
-					"specularexponent": 3,
+					"specularexponent": 10,
 					"diffusecolor": [
 						0,
 						1,

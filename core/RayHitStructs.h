@@ -7,29 +7,27 @@
 
 #include "math/geometry.h"
 
-namespace rt{
+namespace rt {
 
 /*
  * Ray structure definition
  */
-enum RayType {PRIMARY, SECONDARY, SHADOW};
+enum RayType { PRIMARY, SECONDARY, SHADOW };
 
 typedef struct _ray {
-	RayType raytype;
-	Vec3d origin;
-	Vec3d direction;
+    RayType raytype;
+    Vec3d origin;
+    Vec3d direction;
 } Ray;
 
 class Shape;
 typedef struct _hit {
-	Vec3d point;
-	Vec3d normal;
-	Vec3d view;
-	double distance;
-	Shape* shape;
+    Vec3d point;
+    Vec3d normal;
+    double distance;
+    Shape* shape;
 } Hit;
 
-}
+}  
 
-
-#endif /* CORE_RAYHITSTRUCTS_H_ */
+#endif

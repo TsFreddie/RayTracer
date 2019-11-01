@@ -6,37 +6,34 @@
 #ifndef MATERIAL_H_
 #define MATERIAL_H_
 
-#include "math/geometry.h"
 #include "core/RayHitStructs.h"
+#include "math/geometry.h"
 
 #include "rapidjson/document.h"
 using namespace rapidjson;
 
-namespace rt{
+namespace rt {
 
 class LightSource;
-class Material{
-public:
-
+class Material {
+   public:
     Material();
-    virtual ~Material() {};
+    virtual ~Material(){};
     static Material* createMaterial(Value& matSpec);
-    virtual Vec3d Shade(LightSource *light, Hit hit) { return Vec3d(1,0,1); };
+    virtual Vec3d Shade(LightSource* light, Hit hit, Vec3d view) {
+        return Vec3d(1, 0, 1);
+    };
 
     double getTransmit() { return transmit; }
     double getRoughness() { return roughness; }
     double getMetallic() { return metallic; }
 
-private:
-    double transmit; // transparency
-    double roughness; // glossiness
-    double metallic; // reflectivity
-
+   private:
+    double transmit;   // transparency
+    double roughness;  // glossiness
+    double metallic;   // reflectivity
 };
 
+}  
 
-} //namespace rt
-
-
-
-#endif /* MATERIAL_H_ */
+#endif

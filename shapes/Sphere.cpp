@@ -79,7 +79,6 @@ namespace rt{
 		hit->shape = this;
 		hit->point = ray.origin + (ray.direction * hit->distance);
 		hit->normal = ((hit->point - center) * (1/radius));
-		hit->view = (Vec3d(0,0,0) - hit->point).normalize();
 		return true;
 	}
 

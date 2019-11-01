@@ -508,5 +508,5 @@ public:
 
 typedef Matrix44<float> Matrix44f;
 
-#endif /* GEOMETRY_H_ */
+#endif
 

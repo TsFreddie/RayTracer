@@ -23,4 +23,4 @@ class Triangle: public Shape{
 
 
 
-#endif /* TRIANGLE_H_ */
+#endif

@@ -32,11 +32,9 @@ private:
 
 };
 
-
-
 } //namespace rt
 
 
 
 
-#endif /* SPHERE_H_ */
+#endif

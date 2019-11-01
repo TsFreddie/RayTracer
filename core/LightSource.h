@@ -10,29 +10,24 @@
 #include "rapidjson/document.h"
 using namespace rapidjson;
 
-namespace rt{
+namespace rt {
 
-class LightSource{
-public:
-
+class LightSource {
+   public:
     LightSource(Vec3d position, Vec3d intensity);
 
-    virtual ~LightSource() {};
+    virtual ~LightSource(){};
 
     static LightSource* createLight(Value& lightSpec);
 
     Vec3d getPosition() { return position; };
     Vec3d getIntensity() { return intensity; }
 
-private:
-
+   private:
     Vec3d position;
     Vec3d intensity;
-
 };
 
-} //namespace rt
+}  
 
-
-
-#endif /* LIGHTSOURCE_H_ */
+#endif

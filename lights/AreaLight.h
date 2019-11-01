@@ -9,18 +9,10 @@
 
 #include "core/LightSource.h"
 
-namespace rt{
+namespace rt {
 
-class AreaLight:public LightSource{
+class AreaLight : public LightSource {};
 
+}  
 
-};
-
-
-
-} //namespace rt
-
-
-
-
-#endif /* AREALIGHT_H_ */
+#endif

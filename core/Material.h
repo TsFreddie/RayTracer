@@ -21,17 +21,19 @@ class Material {
     virtual ~Material(){};
     static Material* createMaterial(Value& matSpec);
     virtual Vec3d Shade(LightSource* light, Hit hit, Vec3d view) {
-        return Vec3d(1, 0, 1);
+        return diffuse;
     };
 
     double getTransmit() { return transmit; }
     double getRoughness() { return roughness; }
     double getMetallic() { return metallic; }
+    Vec3d getDiffuse() { return diffuse; }
 
    private:
     double transmit;   // transparency
     double roughness;  // glossiness
     double metallic;   // reflectivity
+    Vec3d diffuse;
 };
 
 }  

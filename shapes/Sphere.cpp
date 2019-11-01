@@ -82,6 +82,6 @@ namespace rt{
 		return true;
 	}
 
-} //namespace rt
+} 
 
 

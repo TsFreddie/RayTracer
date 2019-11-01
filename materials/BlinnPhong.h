@@ -17,7 +17,6 @@ class BlinnPhong : public Material {
    public:
     BlinnPhong();
     BlinnPhong(double ka, double ks, double kd, double specular);
-    void setDiffuse(Vec3d color);
     Vec3d Shade(LightSource *light, Hit hit, Vec3d view);
 
    private:
@@ -25,7 +24,6 @@ class BlinnPhong : public Material {
     double ks;
     double kd;
     double specular;
-    Vec3d diffuse;
 };
 
 }  

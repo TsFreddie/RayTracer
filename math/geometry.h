@@ -38,6 +38,8 @@
 #include <iomanip>
 #include <cmath>
 
+#define BIAS 1e-6
+
 
 template<typename T>
 class Vec2

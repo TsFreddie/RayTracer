@@ -18,7 +18,7 @@ class Triangle: public Shape{
 
 
 
-} //namespace rt
+} 
 
 
 

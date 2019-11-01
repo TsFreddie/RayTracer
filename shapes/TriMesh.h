@@ -18,7 +18,7 @@ class TriMesh: public Shape{
 
 
 
-} //namespace rt
+} 
 
 
 

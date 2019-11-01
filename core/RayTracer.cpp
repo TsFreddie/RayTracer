@@ -4,8 +4,6 @@
  */
 #include "RayTracer.h"
 
-#define BIAS 1e-5
-
 namespace rt {
 
 // Calculate primary ray

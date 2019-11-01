@@ -41,9 +41,9 @@ Material* Material::createMaterial(Value& matSpec) {
 
     if (matSpec["diffusecolor"].IsArray() &&
         matSpec["diffusecolor"].Size() >= 3) {
-        auto diffuse = matSpec["diffusecolor"].GetArray();
-        newMat->setDiffuse(Vec3d(diffuse[0].GetFloat(), diffuse[1].GetFloat(),
-                                 diffuse[2].GetFloat()));
+        auto diffuseArray = matSpec["diffusecolor"].GetArray();
+        newMat->diffuse = Vec3d(diffuseArray[0].GetFloat(), diffuseArray[1].GetFloat(),
+                                 diffuseArray[2].GetFloat());
     }
 
     if (matSpec.HasMember("metallic") && matSpec["metallic"].IsNumber()) {

@@ -14,7 +14,6 @@ BlinnPhong::BlinnPhong() : Material() {
     this->ks = 0;
     this->kd = 0;
     this->specular = 0;
-    this->diffuse = Vec3d(1, 1, 1);
 }
 
 BlinnPhong::BlinnPhong(double ka, double ks, double kd, double specular)
@@ -25,8 +24,6 @@ BlinnPhong::BlinnPhong(double ka, double ks, double kd, double specular)
     this->specular = specular;
 }
 
-void BlinnPhong::setDiffuse(Vec3d color) { this->diffuse = color; }
-
 Vec3d BlinnPhong::Shade(LightSource *light, Hit hit, Vec3d view) {
     Vec3d normal = hit.normal;
     Vec3d L = (light->getPosition() - hit.point).normalize();
@@ -34,7 +31,7 @@ Vec3d BlinnPhong::Shade(LightSource *light, Hit hit, Vec3d view) {
     double NL = normal.dotProduct(L);
     double intensity = (NL > 0.0) ? NL : 0.0;
 
-    Vec3d color = diffuse * light->getIntensity() * intensity;
+    Vec3d color = getDiffuse() * light->getIntensity() * intensity;
 
     Vec3d H = (L + view).normalize();
 

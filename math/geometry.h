@@ -67,6 +67,7 @@ public:
     T x, y;
 };
 
+typedef Vec2<double> Vec2d;
 typedef Vec2<float> Vec2f;
 typedef Vec2<int> Vec2i;
 
@@ -508,6 +509,7 @@ public:
     }
 };
 
+typedef Matrix44<double> Matrix44d;
 typedef Matrix44<float> Matrix44f;
 
 #endif

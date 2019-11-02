@@ -23,10 +23,8 @@ class Plane : public Shape {
     bool intersect(Ray ray, Hit *hit);
 
    private:
-    Vec3d v0;
-    Vec3d v1;
-    Vec3d v2;
-    Vec3d v3;
+    Vec3d v0, v1, v2, v3;
+    Vec2d uv0, uv1, uv2, uv3;
     Vec3d normal;
 };
 

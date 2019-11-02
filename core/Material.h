@@ -15,25 +15,27 @@ using namespace rapidjson;
 namespace rt {
 
 class LightSource;
+class PPMTexture;
 class Material {
    public:
     Material();
-    virtual ~Material(){};
+    virtual ~Material();
     static Material* createMaterial(Value& matSpec);
     virtual Vec3d Shade(LightSource* light, Hit hit, Vec3d view) {
-        return diffuse;
+        return diffuseColor;
     };
 
-    double getTransmit() { return transmit; }
-    double getRoughness() { return roughness; }
-    double getMetallic() { return metallic; }
-    Vec3d getDiffuse() { return diffuse; }
+    double getTransmit(double u, double v);
+    double getRoughness(double u, double v);
+    double getMetallic(double u, double v);
+    Vec3d getDiffuse(double u, double v);
 
    private:
-    double transmit;   // transparency
-    double roughness;  // glossiness
-    double metallic;   // reflectivity
-    Vec3d diffuse;
+    PPMTexture *transmit;   // transparency
+    PPMTexture *roughness;  // glossiness
+    PPMTexture *metallic;   // reflectivity
+    PPMTexture *diffuse;
+    Vec3d diffuseColor;
 };
 
 }  // namespace rt

@@ -103,11 +103,11 @@ Vec3d RayTracer::traceRay(Scene* scene, Ray ray, int nbounces) {
     Material* hitMat = nearHit.shape->getMaterial();
 
     // If have reflection, do reflection
-    if (hitMat->getMetallic() > 0) {
+    if (hitMat->getMetallic(0, 0) > 0) {
         Ray R = createSecondaryRay(ray, nearHit);
 
         Vec3d reflectionColor = traceRay(scene, R, nbounces - 1);
-        color = color + reflectionColor * hitMat->getMetallic();
+        color = color + reflectionColor * hitMat->getMetallic(0, 0);
     }
 
     return color;

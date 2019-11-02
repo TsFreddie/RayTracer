@@ -15,7 +15,7 @@ void Scene::createScene(Value& sceneSpecs) {
     //----------parse json object to populate scene-----------
 
     // Populate shapes
-    if (sceneSpecs.HasMember("shapes") && sceneSpecs["shapes"].IsArray()) {
+    if (sceneSpecs.HasMember("shapes")) {
         Value& shapeSpecs = sceneSpecs["shapes"];
         SizeType nshapes = shapeSpecs.Size();
         for (SizeType i = 0; i < nshapes; i++) {
@@ -26,8 +26,7 @@ void Scene::createScene(Value& sceneSpecs) {
     }
 
     // Populate lightsources
-    if (sceneSpecs.HasMember("lightsources") &&
-        sceneSpecs["lightsources"].IsArray()) {
+    if (sceneSpecs.HasMember("lightsources")) {
         Value& lightSpecs = sceneSpecs["lightsources"];
         SizeType nlights = lightSpecs.Size();
         for (SizeType i = 0; i < nlights; i++) {
@@ -38,12 +37,10 @@ void Scene::createScene(Value& sceneSpecs) {
     }
 
     // Set background color
-    if (sceneSpecs.HasMember("backgroundcolor") &&
-        sceneSpecs["backgroundcolor"].IsArray() &&
-        sceneSpecs["backgroundcolor"].Size() >= 3) {
+    if (sceneSpecs.HasMember("backgroundcolor")) {
         Value& bcSpecs = sceneSpecs["backgroundcolor"];
-        backgroundColor = Vec3d(bcSpecs[0].GetFloat(), bcSpecs[1].GetFloat(),
-                                bcSpecs[2].GetFloat());
+        backgroundColor = Vec3d(bcSpecs[0].GetDouble(), bcSpecs[1].GetDouble(),
+                                bcSpecs[2].GetDouble());
     } else {
         backgroundColor = Vec3d(0, 0, 0);
     }
@@ -59,4 +56,4 @@ Scene::~Scene() {
     }
 }
 
-}  
+}  // namespace rt

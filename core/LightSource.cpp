@@ -29,10 +29,10 @@ LightSource* LightSource::createLight(Value& lightSpec) {
         auto position = lightSpec["position"].GetArray();
         auto intensity = lightSpec["intensity"].GetArray();
         newLight = new PointLight(
-            Vec3d(position[0].GetFloat(), position[1].GetFloat(),
-                  position[2].GetFloat()),
-            Vec3d(intensity[0].GetFloat(), intensity[1].GetFloat(),
-                  intensity[2].GetFloat()));
+            Vec3d(position[0].GetDouble(), position[1].GetDouble(),
+                  position[2].GetDouble()),
+            Vec3d(intensity[0].GetDouble(), intensity[1].GetDouble(),
+                  intensity[2].GetDouble()));
     }
 
     return newLight;

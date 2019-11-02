@@ -29,6 +29,6 @@ class ThinLens : public Camera {
     void printCamera();
 };
 
-}  
+}  // namespace rt
 
 #endif

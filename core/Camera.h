@@ -6,9 +6,6 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
-// PI on windows
-#define W_PI 3.1415926535897
-
 #include "math/geometry.h"
 #include "rapidjson/document.h"
 
@@ -53,9 +50,9 @@ class Camera {
     void setHeight(int height) { this->height = height; }
     int getWidth() const { return width; }
     void setWidth(int width) { this->width = width; }
-    int getFovDeg() const { return (int)round(fov * 180.0 / W_PI * 2); }
+    int getFovDeg() const { return (int)round(fov * 45.0 / atan(1) * 2); }
     double getFov() const { return fov; }
-    void setFov(int fov) { this->fov = 0.5 * fov * W_PI / 180.0; }
+    void setFov(int fov) { this->fov = 0.5 * fov * atan(1) / 45.0; }
 
    protected:
     //
@@ -66,6 +63,6 @@ class Camera {
     double fov;  // field of view
 };
 
-}  
+}  // namespace rt
 
 #endif

@@ -43,6 +43,6 @@ class Scene {
     Vec3d backgroundColor;
 };
 
-}  
+}  // namespace rt
 
 #endif

@@ -7,34 +7,26 @@
 #ifndef SPHERE_H_
 #define SPHERE_H_
 
-#include "math/geometry.h"
 #include "core/RayHitStructs.h"
 #include "core/Shape.h"
+#include "math/geometry.h"
 
-namespace rt{
+namespace rt {
 
-class Sphere:public Shape{
+class Sphere : public Shape {
+   public:
+    //
+    // Constructors
+    //
+    Sphere(Vec3d center, double radius) : center(center), radius(radius){};
 
-public:
+    bool intersect(Ray ray, Hit *hit);
 
-	//
-	// Constructors
-	//
-	Sphere();
-	Sphere(Vec3d center, double radius):center(center), radius(radius){};
-
-	bool intersect(Ray ray, Hit *hit);
-
-private:
-
-	Vec3d center;
-	double radius;
-
+   private:
+    Vec3d center;
+    double radius;
 };
 
-} 
-
-
-
+}  // namespace rt
 
 #endif

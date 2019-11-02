@@ -36,6 +36,6 @@ class Material {
     Vec3d diffuse;
 };
 
-}  
+}  // namespace rt
 
 #endif

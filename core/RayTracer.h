@@ -31,6 +31,6 @@ class RayTracer {
    private:
 };
 
-}  
+}  // namespace rt
 
 #endif

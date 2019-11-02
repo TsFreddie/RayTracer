@@ -7,82 +7,61 @@
 		"fov": 35
 	},
 	"scene": {
-		"backgroundcolor": [
-			0.1,
-			0.1,
-			0.1
-		],
+		"backgroundcolor": [ 0.1, 0.1, 0.1 ],
 		"lightsources": [
 			{
 				"type": "pointlight",
-				"position": [
-					-0.2,
-					0.233844,
-					0.08654
-				],
-				"intensity": [
-					1,
-					1,
-					1
-				]
+				"position": [ -0.2, 0.233844, 0.08654 ],
+				"intensity": [ 1, 1, 1 ]
 			}
 		],
 		"shapes": [
 			{
 				"type": "sphere",
-				"center": [
-					0,
-					-0.1,
-					1
-				],
+				"center": [ 0, -0.1, 1 ],
 				"radius": 0.1,
 				"material": {
 					"ks": 0.4,
 					"kd": 0.8,
 					"specularexponent": 3,
-					"diffusecolor": [
-						1,
-						0,
-						0
-					]
+					"diffusecolor": [ 1, 0, 0 ]
 				}
 			},
 			{
 				"type": "sphere",
-				"center": [
-					0.2,
-					0.3,
-					2
-				],
-				"radius": 0.1,
-				"material": {
-					"ks": 0.4,
-					"kd": 0.8,
-					"specularexponent": 10,
-					"diffusecolor": [
-						0,
-						1,
-						0
-					]
-				}
-			},
-			{
-				"type": "sphere",
-				"center": [
-					0.2,
-					-0.3,
-					1.5
-				],
+				"center": [ 0.2, 0.3, 2 ],
 				"radius": 0.1,
 				"material": {
 					"ks": 0.4,
 					"kd": 0.8,
 					"specularexponent": 3,
-					"diffusecolor": [
-						0,
-						0,
-						1
-					]
+					"diffusecolor": [ 0, 1, 0 ]
+				}
+			},
+			{
+				"type": "sphere",
+				"center": [ 0.2, -0.3, 1.5 ],
+				"radius": 0.1,
+				"material": {
+					"ks": 0.4,
+					"kd": 0.8,
+					"specularexponent": 3,
+					"diffusecolor": [ 0, 0, 1 ]
+				}
+			},
+			{
+				"type": "plane",
+				"vertices": [
+					[ 1, -0.4, 0.5 ],
+					[ -1, -0.4, 0.5 ],
+					[ 1, -0.4, 4 ]
+				],
+				"material": {
+					"ks": 0.1,
+					"kd": 1,
+					"specularexponent": 0,
+					"diffusecolor": [ 1, 1, 1 ],
+					"metallic": 1
 				}
 			}
 		]

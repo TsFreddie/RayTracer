@@ -30,6 +30,6 @@ class Pinhole : public Camera {
     void printCamera();
 };
 
-}  
+}  // namespace rt
 
 #endif

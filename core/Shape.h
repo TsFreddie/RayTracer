@@ -38,6 +38,6 @@ class Shape {
     Material* material;
 };
 
-}  
+}  // namespace rt
 
 #endif

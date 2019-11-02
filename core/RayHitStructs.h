@@ -28,6 +28,6 @@ typedef struct _hit {
     Shape* shape;
 } Hit;
 
-}  
+}  // namespace rt
 
 #endif

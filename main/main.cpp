@@ -38,6 +38,7 @@ int main(int argc, char* argv[]) {
     IStreamWrapper is(ifs);
     Document d;  // d holds the complete json object
     d.ParseStream(is);
+    ifs.close();
 
     // generate a camera according to the input file
     Camera* camera = Camera::createCamera(d["camera"]);
@@ -47,8 +48,15 @@ int main(int argc, char* argv[]) {
 
     // generate the scene according to the input file
     Scene* scene = new Scene();
-    scene->createScene(d["scene"]);
-
+    try {
+        scene->createScene(d["scene"]);
+    } catch (...) {
+        std::printf("Can not parse scene. Exiting...");
+        delete scene;
+        delete camera;
+        exit(1);
+    }
+    
     //
     // Main function, render scene
     //

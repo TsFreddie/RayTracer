@@ -13,6 +13,6 @@ namespace rt {
 
 class BVH : public Shape {};
 
-}  
+}  // namespace rt
 
 #endif

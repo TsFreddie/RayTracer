@@ -4,6 +4,8 @@
  */
 #include "Shape.h"
 #include "shapes/Sphere.h"
+#include "shapes/Triangle.h"
+#include "shapes/Plane.h"
 
 namespace rt {
 
@@ -12,16 +14,36 @@ Shape* Shape::createShape(Value& shapeSpec) {
 
     Shape* newShape = NULL;
     if (shapeType.compare("sphere") == 0) {
-        if (!shapeSpec.HasMember("center") || !shapeSpec["center"].IsArray() ||
-            shapeSpec["center"].Size() < 3 || !shapeSpec.HasMember("radius") ||
-            !shapeSpec["radius"].IsFloat()) {
-            return NULL;
-        }
         auto center = shapeSpec["center"].GetArray();
-        double radius = shapeSpec["radius"].GetFloat();
-        newShape = new Sphere(Vec3d(center[0].GetFloat(), center[1].GetFloat(),
-                                    center[2].GetFloat()),
+        double radius = shapeSpec["radius"].GetDouble();
+
+        newShape = new Sphere(Vec3d(center[0].GetDouble(), center[1].GetDouble(),
+                                    center[2].GetDouble()),
                               radius);
+    }
+
+    if (shapeType.compare("plane") == 0) {
+        auto vertices = shapeSpec["vertices"].GetArray();
+        auto v = vertices[0].GetArray();
+        Vec3d a = Vec3d(v[0].GetDouble(), v[1].GetDouble(), v[2].GetDouble());
+        v = vertices[1].GetArray();
+        Vec3d b = Vec3d(v[0].GetDouble(), v[1].GetDouble(), v[2].GetDouble());
+        v = vertices[2].GetArray();
+        Vec3d c = Vec3d(v[0].GetDouble(), v[1].GetDouble(), v[2].GetDouble());
+
+        newShape = new Plane(a,b,c);
+    }
+
+    if (shapeType.compare("triangle") == 0) {
+        auto vertices = shapeSpec["vertices"].GetArray();
+        auto v = vertices[0].GetArray();
+        Vec3d a = Vec3d(v[0].GetDouble(), v[1].GetDouble(), v[2].GetDouble());
+        v = vertices[1].GetArray();
+        Vec3d b = Vec3d(v[0].GetDouble(), v[1].GetDouble(), v[2].GetDouble());
+        v = vertices[2].GetArray();
+        Vec3d c = Vec3d(v[0].GetDouble(), v[1].GetDouble(), v[2].GetDouble());
+
+        newShape = new Triangle(a,b,c);
     }
 
     if (newShape) {
@@ -44,4 +66,4 @@ Shape::~Shape() {
     this->material = NULL;
 }
 
-}  
+}  // namespace rt

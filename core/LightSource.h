@@ -28,6 +28,6 @@ class LightSource {
     Vec3d intensity;
 };
 
-}  
+}  // namespace rt
 
 #endif

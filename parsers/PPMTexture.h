@@ -1,5 +1,5 @@
 /*
- * PPMReader.h
+ * PPMTexture.h
  *
  */
 #ifndef PPMTEXTURE_H_
@@ -24,7 +24,7 @@ class PPMTexture {
             checkerboard();
             return true;
         }
-        
+
         if (rgbBuffer) delete rgbBuffer;
         std::ifstream ifs(filename, std::ios::in | std::ios::binary);
         try {
@@ -86,7 +86,7 @@ class PPMTexture {
 
         // TODO: interpolation
         int px = (int)(uv.x * (width - 1));
-        int py = (int)((1-uv.y) * (height - 1));
+        int py = (int)((1 - uv.y) * (height - 1));
 
         return rgbBuffer[py * width + px];
     }
@@ -100,7 +100,7 @@ class PPMTexture {
         if (uv.y > 1) uv.y = 1;
 
         int px = (int)(uv.x * (width - 1));
-        int py = (int)((1-uv.y) * (height - 1));
+        int py = (int)((1 - uv.y) * (height - 1));
         Vec3d channels = rgbBuffer[py * width + px];
 
         return (channels.x + channels.y + channels.z) / 3.0;

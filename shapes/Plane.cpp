@@ -60,7 +60,7 @@ bool Plane::intersect(Ray ray, Hit *hit) {
     hit->shape = this;
     hit->distance = distance;
     hit->normal = normal;
-    hit->point = ray.origin + ray.direction * distance;
+    hit->point = hitPoint;
 
     double u = v01.dotProduct(v0p) / v01.dotProduct(v01);
     double v = (-v20).dotProduct(v0p) / v20.dotProduct(v20);

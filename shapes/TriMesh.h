@@ -18,18 +18,24 @@ class TriMesh : public Shape {
     //
     // Constructors
     //
-    TriMesh(int ntris);
-
-    void addTri(Vec3d a, Vec3d b, Vec3d c);
-    void addTri(Vec3d a, Vec3d b, Vec3d c, Vec2d uva, Vec2d uvb, Vec2d uvc);
+    TriMesh(int nvert, int ntri);
+    
+    void addVert(Vec3d p, Vec2d uv);
+    void addTri(int a, int b, int c);
+    void addTri(int a, int b, int c, Vec3d n);
     bool intersect(Ray ray, Hit *hit);
 
     ~TriMesh();
 
    private:
+    int cvert;
+    int ctri;
+    int nvert;
+    int ntri;
     Vec3d *verts;
     Vec3d *normals;
     Vec2d *uv;
+    Vec3i *tris;
 };
 
 }  // namespace rt

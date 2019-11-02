@@ -99,6 +99,11 @@ Material::~Material() {
     if (metallic) delete metallic;
     if (roughness) delete roughness;
     if (transmit) delete transmit;
+
+    diffuse = NULL;
+    metallic = NULL;
+    roughness = NULL;
+    transmit = NULL;
 }
 
 }  // namespace rt

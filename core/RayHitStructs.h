@@ -24,6 +24,7 @@ class Shape;
 typedef struct _hit {
     Vec3d point;
     Vec3d normal;
+    Vec2d uv;
     double distance;
     Shape* shape;
 } Hit;

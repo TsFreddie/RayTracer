@@ -31,7 +31,7 @@ Vec3d BlinnPhong::Shade(LightSource *light, Hit hit, Vec3d view) {
     double NL = normal.dotProduct(L);
     double intensity = (NL > 0.0) ? NL : 0.0;
 
-    Vec3d color = getDiffuse(0, 0) * light->getIntensity() * intensity;
+    Vec3d color = getDiffuse(hit.uv) * light->getIntensity() * intensity;
 
     Vec3d H = (L + view).normalize();
 

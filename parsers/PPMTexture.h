@@ -20,6 +20,11 @@ class PPMTexture {
     }
 
     bool file(const char *filename) {
+        if (strcmp(filename, "checkerboard") == 0) {
+            checkerboard();
+            return true;
+        }
+        
         if (rgbBuffer) delete rgbBuffer;
         std::ifstream ifs(filename, std::ios::in | std::ios::binary);
         try {
@@ -64,28 +69,38 @@ class PPMTexture {
         rgbBuffer = new Vec3d[100];
         for (int i = 0; i < 10; ++i) {
             for (int j = 0; j < 10; ++j) {
-                Vec3d color = Vec3d(1, 1, 1) * ((i % 2 + j % 2) % 2);
+                rgbBuffer[i * 10 + j] = Vec3d(1) * ((i % 2 + j % 2) % 2);
             }
         }
         width = 10;
         height = 10;
     }
 
-    Vec3d getChannels(double u, double v) {
-        if (rgbBuffer == NULL) return Vec3d(1,1,1);
+    Vec3d getChannels(Vec2d uv) {
+        if (rgbBuffer == NULL) return Vec3d(1);
+
+        if (uv.x < 0) uv.x = 0;
+        if (uv.y < 0) uv.y = 0;
+        if (uv.x > 1) uv.x = 1;
+        if (uv.y > 1) uv.y = 1;
 
         // TODO: interpolation
-        int px = (int)(u * (width - 1));
-        int py = (int)(v * (height - 1));
+        int px = (int)(uv.x * (width - 1));
+        int py = (int)((1-uv.y) * (height - 1));
 
         return rgbBuffer[py * width + px];
     }
 
-    double getValue(double u, double v) {
+    double getValue(Vec2d uv) {
         if (rgbBuffer == NULL) return 1;
 
-        int px = (int)(u * (width - 1));
-        int py = (int)(v * (height - 1));
+        if (uv.x < 0) uv.x = 0;
+        if (uv.y < 0) uv.y = 0;
+        if (uv.x > 1) uv.x = 1;
+        if (uv.y > 1) uv.y = 1;
+
+        int px = (int)(uv.x * (width - 1));
+        int py = (int)((1-uv.y) * (height - 1));
         Vec3d channels = rgbBuffer[py * width + px];
 
         return (channels.x + channels.y + channels.z) / 3.0;

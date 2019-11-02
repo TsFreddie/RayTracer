@@ -32,6 +32,10 @@ bool Sphere::intersect(Ray ray, Hit *hit) {
     hit->shape = this;
     hit->point = ray.origin + (ray.direction * hit->distance);
     hit->normal = ((hit->point - center) * (1 / radius));
+
+    Vec3d d = -hit->normal;
+    hit->uv = Vec2d(0.5 + atan2(d.z, d.x) / (atan(1) * 8),
+                    0.5 - asin(d.y) / (atan(1) * 4));
     return true;
 }
 

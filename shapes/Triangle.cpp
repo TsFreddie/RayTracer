@@ -11,6 +11,9 @@ Triangle::Triangle(Vec3d a, Vec3d b, Vec3d c) : v0(a), v1(b), v2(c) {
     Vec3d v01 = v1 - v0;
     Vec3d v02 = v2 - v0;
     normal = v01.crossProduct(v02).normalize();
+    uv0 = Vec2d(0,0);
+    uv1 = Vec2d(0,1);
+    uv2 = Vec2d(1,0);
 }
 
 bool Triangle::intersect(Ray ray, Hit *hit) {
@@ -48,6 +51,13 @@ bool Triangle::intersect(Ray ray, Hit *hit) {
     hit->distance = distance;
     hit->normal = normal;
     hit->point = ray.origin + ray.direction * distance;
+
+    double a = (v01).crossProduct(v20).length();
+    double u = (vp1).crossProduct(vp2).length() / a;
+    double v = (vp2).crossProduct(vp0).length() / a;
+    double w = (vp0).crossProduct(vp1).length() / a;
+
+    hit->uv = u * uv0 + v * uv1 + w * uv2;
 
     return true;
 }

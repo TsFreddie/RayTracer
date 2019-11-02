@@ -25,10 +25,10 @@ class Material {
         return diffuseColor;
     };
 
-    double getTransmit(double u, double v);
-    double getRoughness(double u, double v);
-    double getMetallic(double u, double v);
-    Vec3d getDiffuse(double u, double v);
+    double getTransmit(Vec2d uv);
+    double getRoughness(Vec2d uv);
+    double getMetallic(Vec2d uv);
+    Vec3d getDiffuse(Vec2d uv);
 
    private:
     PPMTexture *transmit;   // transparency

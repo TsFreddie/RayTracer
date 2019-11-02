@@ -1,10 +1,11 @@
 {
 	"nbounces": 3,
+	
 	"camera": {
 		"type": "pinhole",
 		"width": 800,
 		"height": 800,
-		"fov": 35
+		"fov": 60
 	},
 	"scene": {
 		"backgroundcolor": [ 0.1, 0.1, 0.1 ],
@@ -21,10 +22,11 @@
 				"center": [ 0, -0.1, 1 ],
 				"radius": 0.1,
 				"material": {
-					"ks": 0.4,
-					"kd": 0.8,
+					"ks": 0.2,
+					"kd": 1,
 					"specularexponent": 3,
-					"diffusecolor": [ 1, 0, 0 ]
+					"metallic": 0,
+					"diffuse": "checkerboard"
 				}
 			},
 			{
@@ -50,10 +52,10 @@
 				}
 			},
 			{
-				"type": "plane",
+				"type": "triangle",
 				"vertices": [
-					[ 1, -0.4, 0.5 ],
-					[ -1, -0.4, 0.5 ],
+					[ -1, -0.4, 4 ],
+					[ -1, 1.6, 4 ],
 					[ 1, -0.4, 4 ]
 				],
 				"material": {
@@ -61,7 +63,24 @@
 					"kd": 1,
 					"specularexponent": 0,
 					"diffusecolor": [ 1, 1, 1 ],
-					"metallic": 1
+					"diffuse": "examples/uvtest.ppm",
+					"metallic": 0
+				}
+			},
+			{
+				"type": "plane",
+				"vertices": [
+					[ -1, -0.4, 0.5 ],
+					[ -1, -0.4, 4 ],
+					[ 1, -0.4, 0.5 ]
+				],
+				"material": {
+					"ks": 0.1,
+					"kd": 1,
+					"specularexponent": 0,
+					"diffusecolor": [ 1, 1, 1 ],
+					"diffuse": "examples/uvtest.ppm",
+					"metallic": "checkerboard"
 				}
 			}
 		]

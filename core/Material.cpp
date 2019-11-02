@@ -10,16 +10,19 @@ namespace rt {
 
 Material::Material() {
     transmit = new PPMTexture();
+    transmit->solid(0);
     metallic = new PPMTexture();
+    metallic->solid(0.5);
     roughness = new PPMTexture();
+    roughness->solid(0);
     diffuse = new PPMTexture();
 }
 
-double Material::getTransmit(double u, double v) { return transmit->getValue(u, v); }
-double Material::getRoughness(double u, double v) { return roughness->getValue(u, v); }
-double Material::getMetallic(double u, double v) { return metallic->getValue(u, v); }
-Vec3d Material::getDiffuse(double u, double v) {
-    return diffuseColor * diffuse->getChannels(u, v);
+double Material::getTransmit(Vec2d uv) { return transmit->getValue(uv); }
+double Material::getRoughness(Vec2d uv) { return roughness->getValue(uv); }
+double Material::getMetallic(Vec2d uv) { return metallic->getValue(uv); }
+Vec3d Material::getDiffuse(Vec2d uv) {
+    return diffuseColor * diffuse->getChannels(uv);
 }
 
 Material* Material::createMaterial(Value& matSpec) {
@@ -60,31 +63,32 @@ Material* Material::createMaterial(Value& matSpec) {
     }
 
     if (matSpec.HasMember("diffuse") && matSpec["diffuse"].IsString()) {
-        const char* str = matSpec["diffuse"].GetString();
-        if (strcmp(str, "checkerboard") == 0) {
-            newMat->diffuse->checkerboard();
-        } else {
-            newMat->diffuse->file(str);
-        }
+        newMat->diffuse->file(matSpec["diffuse"].GetString());
     }
 
     // TODO: property texture
-    if (matSpec.HasMember("metallic") && matSpec["metallic"].IsNumber()) {
-        newMat->metallic->solid(matSpec["metallic"].GetDouble());
-    } else {
-        newMat->metallic->solid(0.5);
+    if (matSpec.HasMember("metallic")) {
+        if (matSpec["metallic"].IsNumber()) {
+            newMat->metallic->solid(matSpec["metallic"].GetDouble());
+        } else if (matSpec["metallic"].IsString()) {
+            newMat->metallic->file(matSpec["metallic"].GetString());
+        }
     }
 
-    if (matSpec.HasMember("roughness") && matSpec["roughness"].IsNumber()) {
-        newMat->roughness->solid(matSpec["roughness"].GetDouble());
-    } else {
-        newMat->roughness->solid(0);
+    if (matSpec.HasMember("roughness")) {
+        if (matSpec["roughness"].IsNumber()) {
+            newMat->roughness->solid(matSpec["roughness"].GetDouble());
+        } else if (matSpec["roughness"].IsString()) {
+            newMat->roughness->file(matSpec["roughness"].GetString());
+        }
     }
 
-    if (matSpec.HasMember("transmit") && matSpec["transmit"].IsNumber()) {
-        newMat->transmit->solid(matSpec["transmit"].GetDouble());
-    } else {
-        newMat->transmit->solid(0);
+    if (matSpec.HasMember("transmit")) {
+        if (matSpec["transmit"].IsNumber()) {
+            newMat->transmit->solid(matSpec["transmit"].GetDouble());
+        } else if (matSpec["transmit"].IsString()) {
+            newMat->transmit->file(matSpec["transmit"].GetString());
+        }
     }
 
     return newMat;

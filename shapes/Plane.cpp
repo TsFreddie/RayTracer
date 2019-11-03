@@ -12,10 +12,14 @@ Plane::Plane(Vec3d a, Vec3d b, Vec3d c) : v0(a), v1(b), v2(c) {
     Vec3d v02 = v2 - v0;
     v3 = v1 + v02;
     normal = v01.crossProduct(v02).normalize();
-    uv0 = Vec2d(0,0);
-    uv1 = Vec2d(0,1);
-    uv2 = Vec2d(1,0);
-    uv3 = Vec2d(1,1);
+    uv0 = Vec2d(0, 0);
+    uv1 = Vec2d(1, 0);
+    uv2 = Vec2d(0, 1);
+    uv3 = Vec2d(1, 1);
+    extendBound(v0);
+    extendBound(v1);
+    extendBound(v2);
+    extendBound(v3);
 }
 
 bool Plane::intersect(Ray ray, Hit *hit) {

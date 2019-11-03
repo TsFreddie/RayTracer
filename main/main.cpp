@@ -50,8 +50,14 @@ int main(int argc, char* argv[]) {
     Scene* scene = new Scene();
     try {
         scene->createScene(d["scene"]);
+    } catch (const char* err) {
+        std::printf(err);
+        std::printf("Can not parse scene. Exiting...\n");
+        delete scene;
+        delete camera;
+        exit(1);
     } catch (...) {
-        std::printf("Can not parse scene. Exiting...");
+        std::printf("Can not parse scene. Exiting...\n");
         delete scene;
         delete camera;
         exit(1);

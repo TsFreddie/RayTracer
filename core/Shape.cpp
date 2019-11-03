@@ -3,12 +3,18 @@
  *
  */
 #include "Shape.h"
+#include "parsers/PLYReader.h"
 #include "shapes/Plane.h"
 #include "shapes/Sphere.h"
 #include "shapes/TriMesh.h"
 #include "shapes/Triangle.h"
 
 namespace rt {
+
+Shape::Shape() {
+    bound.min = Vec3d(INFINITY, INFINITY, INFINITY);
+    bound.max = Vec3d(0, 0, 0);
+}
 
 Shape* Shape::createShape(Value& shapeSpec) {
     std::string shapeType = shapeSpec["type"].GetString();
@@ -73,7 +79,35 @@ Shape* Shape::createShape(Value& shapeSpec) {
     }
 
     if (shapeType.compare("ply") == 0) {
-        // TODO: PLY
+        const char* filename = shapeSpec["file"].GetString();
+        PLYReader ply(filename);
+
+        int nvert = ply.nVert();
+        int ntri = ply.nTri();
+
+        if (nvert < 0 || ntri < 0) return NULL;
+
+        Vec3d* vnormals = new Vec3d[nvert];
+        TriMesh* mesh = new TriMesh(nvert, ntri);
+
+        for (int i = 0; i < nvert; ++i) {
+            Vec3d vert, normal;
+            Vec2d uv;
+
+            ply.ReadVert(vert, normal, uv);
+            mesh->addVert(vert, uv);
+            vnormals[i] = normal;
+        }
+
+        for (int i = 0; i < ntri; ++i) {
+            Vec3i tri;
+            if (!ply.ReadTri(tri)) continue;
+            if (tri.x >= nvert) continue;
+            mesh->addTri(tri.x, tri.y, tri.z, vnormals[tri.x]);
+        }
+
+        newShape = mesh;
+        delete vnormals;
     }
 
     if (newShape) {
@@ -87,6 +121,24 @@ Shape* Shape::createShape(Value& shapeSpec) {
         }
     }
     return newShape;
+}
+
+void Shape::extendBound(Vec3d point) {
+    if (point.x < bound.min.x) bound.min.x = point.x;
+    if (point.y < bound.min.y) bound.min.y = point.y;
+    if (point.z < bound.min.z) bound.min.z = point.z;
+    if (point.x > bound.max.x) bound.max.x = point.x;
+    if (point.y > bound.max.y) bound.max.y = point.y;
+    if (point.z > bound.max.z) bound.max.z = point.z;
+}
+
+void Shape::mergeBound(Bound bound) {
+    if (bound.min.x < this->bound.min.x) this->bound.min.x = bound.min.x;
+    if (bound.min.y < this->bound.min.y) this->bound.min.y = bound.min.y;
+    if (bound.min.z < this->bound.min.z) this->bound.min.z = bound.min.z;
+    if (bound.max.x > this->bound.max.x) this->bound.max.x = bound.max.x;
+    if (bound.max.y > this->bound.max.y) this->bound.max.y = bound.max.y;
+    if (bound.max.z > this->bound.max.z) this->bound.max.z = bound.max.z;
 }
 
 Shape::~Shape() {

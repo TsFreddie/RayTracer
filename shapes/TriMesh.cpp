@@ -23,6 +23,7 @@ void TriMesh::addVert(Vec3d p, Vec2d uv) {
     if (cvert >= nvert) return;
 
     verts[cvert] = p;
+    extendBound(p);
     this->uv[cvert] = uv;
 
     ++cvert;

@@ -7,6 +7,11 @@
 
 namespace rt {
 
+Sphere::Sphere(Vec3d center, double radius): center(center), radius(radius){
+    extendBound(center + Vec3d(1, 1, 1) * radius);
+    extendBound(center + Vec3d(-1, -1, -1) * radius);
+}
+
 /**
  * Computes whether a ray hit the specific instance of a sphere shape and
  * returns the hit data

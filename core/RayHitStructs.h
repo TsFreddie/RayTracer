@@ -29,6 +29,11 @@ typedef struct _hit {
     Shape* shape;
 } Hit;
 
+typedef struct _bound {
+    Vec3d min;
+    Vec3d max;
+} Bound;
+
 }  // namespace rt
 
 #endif

@@ -10,6 +10,8 @@
 #include "core/RayHitStructs.h"
 
 #include "rapidjson/document.h"
+
+#include "parsers/PLYReader.h"
 using namespace rapidjson;
 
 namespace rt {
@@ -19,7 +21,7 @@ class Shape {
     //
     // Constructors
     //
-    Shape(){};
+    Shape();
 
     //
     // Destructor (must be overriden in subclass)
@@ -33,9 +35,14 @@ class Shape {
 
     static Shape* createShape(Value& shapeSpec);
     Material* getMaterial() { return material; }
+    Bound getBound() { return bound; }
+    void extendBound(Vec3d point);
+    void mergeBound(Bound bound);
+    
 
    protected:
     Material* material;
+    Bound bound;
 };
 
 }  // namespace rt

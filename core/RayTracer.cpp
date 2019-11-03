@@ -21,7 +21,7 @@ Ray RayTracer::createPrimRay(Camera* camera, int x, int y) {
     double rx = (2 * ((x + 0.5) / (double)width) - 1) * tan(fov) * ratio;
     double ry = (1 - 2 * ((y + 0.5) / (double)height)) * tan(fov);
 
-    ray.direction = Vec3d(rx, ry, 1).normalize();
+    ray.direction = Vec3d(rx, ry, -1).normalize();
 
     return ray;
 }

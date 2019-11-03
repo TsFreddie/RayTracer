@@ -12,8 +12,11 @@ Triangle::Triangle(Vec3d a, Vec3d b, Vec3d c) : v0(a), v1(b), v2(c) {
     Vec3d v02 = v2 - v0;
     normal = v01.crossProduct(v02).normalize();
     uv0 = Vec2d(0, 0);
-    uv1 = Vec2d(0, 1);
-    uv2 = Vec2d(1, 0);
+    uv1 = Vec2d(1, 0);
+    uv2 = Vec2d(0, 1);
+    extendBound(v0);
+    extendBound(v1);
+    extendBound(v2);
 }
 
 bool Triangle::intersect(Ray ray, Hit *hit) {

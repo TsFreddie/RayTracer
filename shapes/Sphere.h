@@ -18,7 +18,7 @@ class Sphere : public Shape {
     //
     // Constructors
     //
-    Sphere(Vec3d center, double radius) : center(center), radius(radius){};
+    Sphere(Vec3d center, double radius);
 
     bool intersect(Ray ray, Hit *hit);
 

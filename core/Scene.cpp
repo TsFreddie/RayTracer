@@ -44,9 +44,28 @@ void Scene::createScene(Value& sceneSpecs) {
     } else {
         backgroundColor = Vec3d(0, 0, 0);
     }
+
+    // bvhVector.push_back(new BVH(shapes, 0, (int)shapes.size()));
+}
+
+std::vector<Shape*>::iterator Scene::itShapeBegin() {
+    if (bvhVector.size() > 0) {
+        return bvhVector.begin();
+    }
+    return shapes.begin();
+}
+std::vector<Shape*>::iterator Scene::itShapeEnd() {
+    if (bvhVector.size() > 0) {
+        return bvhVector.end();
+    }
+    return shapes.end();
 }
 
 Scene::~Scene() {
+    for (auto it = bvhVector.begin(); it != bvhVector.end(); ++it) {
+        delete *it;
+    }
+
     for (auto it = shapes.begin(); it != shapes.end(); ++it) {
         delete *it;
     }

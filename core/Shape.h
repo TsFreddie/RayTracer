@@ -31,13 +31,14 @@ class Shape {
     //
     // Shape abstract methods (to be implemented by subclasses)
     //
-    virtual bool intersect(Ray, Hit*) = 0;
+    virtual double intersect(Ray, Hit*) = 0;
 
     static Shape* createShape(Value& shapeSpec);
     Material* getMaterial() { return material; }
     Bound getBound() { return bound; }
     void extendBound(Vec3d point);
     void mergeBound(Bound bound);
+    bool hasVolume();
     
 
    protected:

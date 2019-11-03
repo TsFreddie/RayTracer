@@ -23,7 +23,7 @@ class TriMesh : public Shape {
     void addVert(Vec3d p, Vec2d uv);
     void addTri(int a, int b, int c);
     void addTri(int a, int b, int c, Vec3d n);
-    bool intersect(Ray ray, Hit *hit);
+    double intersect(Ray ray, Hit *hit);
 
     ~TriMesh();
 

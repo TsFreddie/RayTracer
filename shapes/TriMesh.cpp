@@ -65,7 +65,7 @@ TriMesh::~TriMesh() {
     normals = NULL;
 }
 
-bool TriMesh::intersect(Ray ray, Hit *hit) {
+double TriMesh::intersect(Ray ray, Hit *hit) {
     int iNearTri = -1;
     double nearDist = INFINITY;
     for (int t = 0; t < ctri; ++t) {
@@ -85,8 +85,8 @@ bool TriMesh::intersect(Ray ray, Hit *hit) {
         }
     }
 
-    if (iNearTri < 0) return false;
-    if (!hit) return true;
+    if (iNearTri < 0) return -1;
+    if (!hit) return nearDist;
 
     auto tri = tris[iNearTri];
     Vec3d v0 = verts[tri.x];
@@ -115,7 +115,7 @@ bool TriMesh::intersect(Ray ray, Hit *hit) {
 
     hit->uv = u * uv0 + v * uv1 + w * uv2;
 
-    return true;
+    return nearDist;
 }
 
 }  // namespace rt

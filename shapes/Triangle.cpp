@@ -19,11 +19,11 @@ Triangle::Triangle(Vec3d a, Vec3d b, Vec3d c) : v0(a), v1(b), v2(c) {
     extendBound(v2);
 }
 
-bool Triangle::intersect(Ray ray, Hit *hit) {
+double Triangle::intersect(Ray ray, Hit *hit) {
     double distance;
 
-    if (!Triangle::intersect(ray, v0, v1, v2, normal, distance)) return false;
-    if (!hit) return true;
+    if (!Triangle::intersect(ray, v0, v1, v2, normal, distance)) return -1;
+    if (!hit) return distance;
 
     hit->shape = this;
     hit->distance = distance;
@@ -42,7 +42,7 @@ bool Triangle::intersect(Ray ray, Hit *hit) {
     double w = (vp0).crossProduct(vp1).length() / a;
 
     hit->uv = u * uv0 + v * uv1 + w * uv2;
-    return true;
+    return hit->distance;
 }
 
 bool Triangle::intersect(Ray ray, Vec3d v0, Vec3d v1, Vec3d v2, Vec3d normal,

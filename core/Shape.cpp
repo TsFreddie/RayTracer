@@ -13,7 +13,9 @@ namespace rt {
 
 Shape::Shape() {
     bound.min = Vec3d(INFINITY, INFINITY, INFINITY);
-    bound.max = Vec3d(0, 0, 0);
+    double negInf = -1 * INFINITY;
+    bound.max = Vec3d(negInf, negInf, negInf);
+    material = NULL;
 }
 
 Shape* Shape::createShape(Value& shapeSpec) {
@@ -139,6 +141,13 @@ void Shape::mergeBound(Bound bound) {
     if (bound.max.x > this->bound.max.x) this->bound.max.x = bound.max.x;
     if (bound.max.y > this->bound.max.y) this->bound.max.y = bound.max.y;
     if (bound.max.z > this->bound.max.z) this->bound.max.z = bound.max.z;
+}
+
+bool Shape::hasVolume() {
+    if (bound.min.x >= bound.max.x) return false;
+    if (bound.min.y >= bound.max.y) return false;
+    if (bound.min.z >= bound.max.z) return false;
+    return true;
 }
 
 Shape::~Shape() {

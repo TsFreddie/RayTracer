@@ -12,6 +12,7 @@
 
 #include "core/LightSource.h"
 #include "core/Shape.h"
+#include "shapes/BVH.h"
 #include "math/geometry.h"
 
 using namespace rapidjson;
@@ -23,8 +24,8 @@ class Scene {
     Scene(){};
 
     void createScene(Value& scenespecs);
-    std::vector<Shape*>::iterator itShapeBegin() { return shapes.begin(); }
-    std::vector<Shape*>::iterator itShapeEnd() { return shapes.end(); }
+    std::vector<Shape*>::iterator itShapeBegin();
+    std::vector<Shape*>::iterator itShapeEnd();
 
     std::vector<LightSource*>::iterator itLightBegin() {
         return lightSources.begin();
@@ -38,6 +39,7 @@ class Scene {
     ~Scene();
 
    private:
+    std::vector<Shape*> bvhVector;
     std::vector<LightSource*> lightSources;
     std::vector<Shape*> shapes;
     Vec3d backgroundColor;

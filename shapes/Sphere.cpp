@@ -21,27 +21,31 @@ Sphere::Sphere(Vec3d center, double radius): center(center), radius(radius){
  * @return hit struct containing intersection information
  *
  */
-bool Sphere::intersect(Ray ray, Hit *hit) {
+double Sphere::intersect(Ray ray, Hit *hit) {
     Vec3d l = center - ray.origin;
     double tca = l.dotProduct(ray.direction);  // Closest approach
-    if (tca < 0) return false;  // Ray intersection behind ray origin
+    if (tca < 0) return -1;  // Ray intersection behind ray origin
     double d2 = l.dotProduct(l) - tca * tca;
-    if (d2 > radius * radius) return false;  // Ray doesn't intersect
-    if (!hit) return true;
+    if (d2 > radius * radius) return -1;  // Ray doesn't intersect
+
     double thc =
         sqrt(radius * radius - d2);  // Closest approach to surface of sphere
     double t0 = tca - thc;
     double t1 = tca + thc;
 
-    hit->distance = ((t0 < t1) ? t0 : t1);
+    double distance = ((t0 < t1) ? t0 : t1);
+
+    if (!hit) return distance;
+    
+    hit->distance = distance;
     hit->shape = this;
-    hit->point = ray.origin + (ray.direction * hit->distance);
+    hit->point = ray.origin + (ray.direction * distance);
     hit->normal = ((hit->point - center) * (1 / radius));
 
     Vec3d d = -hit->normal;
     hit->uv = Vec2d(0.5 + atan2(d.z, d.x) / (atan(1) * 8),
                     0.5 - asin(d.y) / (atan(1) * 4));
-    return true;
+    return distance;
 }
 
 }  // namespace rt

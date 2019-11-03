@@ -19,8 +19,9 @@ class Triangle : public Shape {
     // Constructors
     //
     Triangle(Vec3d a, Vec3d b, Vec3d c);
+    Triangle(Vec3d a, Vec3d b, Vec3d c, Vec3d normal);
 
-    bool intersect(Ray ray, Hit *hit);
+    double intersect(Ray ray, Hit *hit);
     static bool intersect(Ray ray, Vec3d v0, Vec3d v1, Vec3d v2, Vec3d normal,
                           double &dist);
 

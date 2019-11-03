@@ -20,7 +20,7 @@ class Sphere : public Shape {
     //
     Sphere(Vec3d center, double radius);
 
-    bool intersect(Ray ray, Hit *hit);
+    double intersect(Ray ray, Hit *hit);
 
    private:
     Vec3d center;

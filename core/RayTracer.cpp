@@ -22,6 +22,7 @@ Ray RayTracer::createPrimRay(Camera* camera, int x, int y) {
     double ry = (1 - 2 * ((y + 0.5) / (double)height)) * tan(fov);
 
     ray.direction = Vec3d(rx, ry, -1).normalize();
+    ray.invDir = 1.0 / ray.direction;
 
     return ray;
 }
@@ -31,6 +32,7 @@ Ray RayTracer::createShadowRay(Hit hit, Vec3d lightPos) {
     ray.raytype = SHADOW;
     ray.direction = (lightPos - hit.point).normalize();
     ray.origin = hit.point + hit.normal * BIAS;
+    ray.invDir = 1.0 / ray.direction;
 
     return ray;
 }
@@ -42,6 +44,7 @@ Ray RayTracer::createSecondaryRay(Ray inRay, Hit hit, float randomness = 0) {
     outRay.direction = inRay.direction -
                        hit.normal * 2 * inRay.direction.dotProduct(hit.normal);
     outRay.origin = hit.point + hit.normal * BIAS;
+    outRay.invDir = 1.0 / outRay.direction;
 
     return outRay;
 }
@@ -50,10 +53,11 @@ Vec3d RayTracer::traceRay(Scene* scene, Ray ray, int nbounces) {
     Hit nearHit;
     nearHit.distance = INFINITY;
     nearHit.shape = NULL;
+
     for (auto it = scene->itShapeBegin(); it != scene->itShapeEnd(); ++it) {
         auto shape = *it;
         Hit hit;
-        if (shape->intersect(ray, &hit)) {
+        if (shape->intersect(ray, &hit) >= 0) {
             if (hit.distance < nearHit.distance) {
                 nearHit = hit;
             }
@@ -84,7 +88,7 @@ Vec3d RayTracer::traceRay(Scene* scene, Ray ray, int nbounces) {
         for (auto it2 = scene->itShapeBegin(); it2 != scene->itShapeEnd();
              ++it2) {
             auto shape = *it2;
-            if (shape->intersect(shadowRay, NULL)) {
+            if (shape->intersect(shadowRay, NULL) >= 0) {
                 inShadow = true;
                 break;
             }
@@ -162,4 +166,4 @@ Vec3d* RayTracer::tonemap(Vec3d* pixelbuffer, int width, int height) {
     return pixelbuffer;
 }
 
-}  
+}  // namespace rt

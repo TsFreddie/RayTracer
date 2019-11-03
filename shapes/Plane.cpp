@@ -22,16 +22,16 @@ Plane::Plane(Vec3d a, Vec3d b, Vec3d c) : v0(a), v1(b), v2(c) {
     extendBound(v3);
 }
 
-bool Plane::intersect(Ray ray, Hit *hit) {
+double Plane::intersect(Ray ray, Hit *hit) {
     double nd = normal.dotProduct(ray.direction);
     if (abs(nd) < 1e-6) {
-        return false;
+        return -1;
     }
 
     Vec3d vo = v0 - ray.origin;
     double distance = vo.dotProduct(normal) / nd;
 
-    if (distance < 0) return false;
+    if (distance < 0) return -1;
 
     Vec3d hitPoint = ray.origin + ray.direction * distance;
 
@@ -45,24 +45,24 @@ bool Plane::intersect(Ray ray, Hit *hit) {
 
     Vec3d v0p = hitPoint - v0;
     if (normal.dotProduct(v01.crossProduct(v0p)) < 0)
-        return false;
+        return -1;
 
     Vec3d v1p = hitPoint - v1;
     if (normal.dotProduct(v13.crossProduct(v1p)) < 0)
-        return false;
+        return -1;
 
     Vec3d v3p = hitPoint - v3;
     if (normal.dotProduct(v32.crossProduct(v3p)) < 0)
-        return false;
+        return -1;
 
     Vec3d v2p = hitPoint - v2;
     if (normal.dotProduct(v20.crossProduct(v2p)) < 0)
-        return false;
+        return -1;
 
-    if (!hit) return true;
-
-    hit->shape = this;
+    if (!hit) return distance;
+    
     hit->distance = distance;
+    hit->shape = this;
     hit->normal = normal;
     hit->point = hitPoint;
 
@@ -71,7 +71,7 @@ bool Plane::intersect(Ray ray, Hit *hit) {
 
     hit->uv = uv0*(1-v)*(1-u)+uv1*(1-v)*u+uv2*v*(1-u)+uv3*u*v;
 
-    return true;
+    return distance;
 }
 
 }  // namespace rt

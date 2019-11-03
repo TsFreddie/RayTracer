@@ -5,6 +5,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <ctime>
 
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
@@ -47,6 +48,7 @@ int main(int argc, char* argv[]) {
     camera->printCamera();
 
     // generate the scene according to the input file
+    std::printf("Creating scenes...\n");
     Scene* scene = new Scene();
     try {
         scene->createScene(d["scene"]);
@@ -66,8 +68,13 @@ int main(int argc, char* argv[]) {
     //
     // Main function, render scene
     //
+    std::printf("Rendering...\n");
+    clock_t begin = clock();
     Vec3d* pixelbuffer =
         RayTracer::render(camera, scene, d["nbounces"].GetInt());
+    clock_t end = clock();
+    double elapsed = double(end - begin) / CLOCKS_PER_SEC;
+    std::printf("Scene Rendered in %.2lfs\n", elapsed);
 
     // free resources when rendering is finished
     int outputWidth = camera->getWidth();

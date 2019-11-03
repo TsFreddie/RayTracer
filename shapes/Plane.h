@@ -20,7 +20,7 @@ class Plane : public Shape {
     //
     Plane(Vec3d a, Vec3d b, Vec3d c);
 
-    bool intersect(Ray ray, Hit *hit);
+    double intersect(Ray ray, Hit *hit);
 
    private:
     Vec3d v0, v1, v2, v3;

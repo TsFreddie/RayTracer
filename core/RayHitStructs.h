@@ -18,6 +18,7 @@ typedef struct _ray {
     RayType raytype;
     Vec3d origin;
     Vec3d direction;
+    Vec3d invDir;
 } Ray;
 
 class Shape;

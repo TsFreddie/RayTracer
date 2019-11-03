@@ -1,11 +1,12 @@
 {
 	"nbounces": 3,
+	"bvh": false,
 
 	"camera": {
 		"type": "pinhole",
 		"width": 800,
 		"height": 800,
-		"fov": 60
+		"fov": 35
 	},
 	"scene": {
 		"backgroundcolor": [ 0.1, 0.1, 0.1 ],
@@ -18,57 +19,8 @@
 		],
 		"shapes": [
 			{
-				"type": "sphere",
-				"center": [ 0, -0.1, -1 ],
-				"radius": 0.1,
-				"material": {
-					"ks": 0.2,
-					"kd": 1,
-					"specularexponent": 3,
-					"metallic": 0,
-					"diffuse": "checkerboard"
-				}
-			},
-			{
-				"type": "sphere",
-				"center": [ 0.2, 0.3, -2 ],
-				"radius": 0.1,
-				"material": {
-					"ks": 0.4,
-					"kd": 0.8,
-					"specularexponent": 3,
-					"diffusecolor": [ 0, 1, 0 ]
-				}
-			},
-			{
-				"type": "sphere",
-				"center": [ 0.2, -0.3, -1.5 ],
-				"radius": 0.1,
-				"material": {
-					"ks": 0.4,
-					"kd": 0.8,
-					"specularexponent": 3,
-					"diffusecolor": [ 0, 0, 1 ]
-				}
-			},
-			{
-				"type": "trimesh",
-				"vertices": [
-					[ -1, -0.4, -3.5 ],
-					[ 1, -0.4, -2.7 ],
-					[ -1, 1.6, -4 ],
-					[ 1, 1.6, -4]
-				],
-				"tris": [
-					[0, 1, 2],
-					[1, 3, 2]
-				],
-				"uv": [
-					[0.25, 0.25],
-					[0.75, 0.25],
-					[0.25, 0.75],
-					[0.75, 0.75]
-				],
+				"type": "ply",
+				"file": "examples/monkey.ply",
 				"material": {
 					"ks": 0.1,
 					"kd": 1,
@@ -81,16 +33,16 @@
 			{
 				"type": "plane",
 				"vertices": [
-					[ -1, -0.4, -0.5 ],
-					[ 1, -0.4, -0.5 ],
-					[ -1, -0.4, -4 ]
+					[ -5, -1.5, -5 ],
+					[ 5, -1.5, -5 ],
+					[ -5, -1.5, -15 ]
 				],
 				"material": {
 					"ks": 0.1,
 					"kd": 1,
 					"specularexponent": 0,
 					"diffusecolor": [ 1, 1, 1 ],
-					"diffuse": "examples/uvtest.ppm",
+					"diffuse": "checkerboard",
 					"metallic": "checkerboard"
 				}
 			}

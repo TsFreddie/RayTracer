@@ -11,8 +11,7 @@ namespace rt {
 TriMesh::TriMesh(int nvert, int ntri) {
     verts = new Vec3d[nvert];
     uv = new Vec2d[nvert];
-    tris = new Vec3i[ntri];
-    normals = new Vec3d[ntri];
+    tris.reserve(ntri);
     this->nvert = nvert;
     this->ntri = ntri;
     cvert = 0;
@@ -33,12 +32,7 @@ void TriMesh::addTri(int a, int b, int c) {
     if (a >= cvert || b >= cvert || c >= cvert) return;
     if (ctri >= ntri) return;
 
-    tris[ctri] = Vec3i(a, b, c);
-
-    Vec3d ab = verts[b] - verts[a];
-    Vec3d ac = verts[c] - verts[a];
-
-    normals[ctri] = ab.crossProduct(ac).normalize();
+    tris.push_back(new Tri(a, b, c, verts));
 
     ++ctri;
 }
@@ -47,55 +41,70 @@ void TriMesh::addTri(int a, int b, int c, Vec3d n) {
     if (a >= cvert || b >= cvert || c >= cvert) return;
     if (ctri >= ntri) return;
 
-    tris[ctri] = Vec3i(a, b, c);
-    normals[ctri] = n.normalize();
+    tris.push_back(new Tri(a, b, c, n, verts));
 
     ++ctri;
+}
+
+void TriMesh::bake() {
+    tris.shrink_to_fit();
+    bvh = new BVH(tris, 0, (int)tris.size());
 }
 
 TriMesh::~TriMesh() {
     if (verts) delete verts;
     if (uv) delete uv;
-    if (tris) delete tris;
-    if (normals) delete normals;
 
     verts = NULL;
     uv = NULL;
-    tris = NULL;
-    normals = NULL;
+
+    for (auto it = tris.begin(); it != tris.end(); ++it) {
+        delete *it;
+    }
+}
+
+double TriMesh::Tri::intersect(Ray ray, Hit *hit) {
+    double distance;
+    if (!Triangle::intersect(ray, v0, v1, v2, normal, distance)) return -1;
+    
+    if (hit != NULL) hit->shape = this;
+    return distance;
 }
 
 double TriMesh::intersect(Ray ray, Hit *hit) {
-    int iNearTri = -1;
+    Vec3i nearTri;
+    Vec3d nearNormal;
     double nearDist = INFINITY;
-    for (int t = 0; t < ctri; ++t) {
-        auto tri = tris[t];
-        auto normal = normals[t];
-
-        double distance;
-        Vec3d v0 = verts[tri.x];
-        Vec3d v1 = verts[tri.y];
-        Vec3d v2 = verts[tri.z];
-
-        if (Triangle::intersect(ray, v0, v1, v2, normal, distance)) {
-            if (distance < nearDist) {
+    
+    if (bvh == NULL) {
+        for (auto it = tris.begin(); it != tris.end(); ++it) {
+            Tri *tri = dynamic_cast<Tri*>(*it);
+            double distance = tri->intersect(ray, NULL);
+            if (distance >= 0 && distance < nearDist) {
                 nearDist = distance;
-                iNearTri = t;
+                nearTri = tri->getTri();
+                nearNormal = tri->getNormal();
             }
+        }
+    } else {
+        nearDist = bvh->intersect(ray, hit);
+        if (hit != NULL && nearDist >= 0) {
+            Tri *tri = dynamic_cast<Tri*>(hit->shape);
+            nearTri = tri->getTri();
+            nearNormal = tri->getNormal();
         }
     }
 
-    if (iNearTri < 0) return -1;
+    if (nearDist >= INFINITY || nearDist < 0) return -1;
     if (!hit) return nearDist;
 
-    auto tri = tris[iNearTri];
-    Vec3d v0 = verts[tri.x];
-    Vec3d v1 = verts[tri.y];
-    Vec3d v2 = verts[tri.z];
-    Vec2d uv0 = uv[tri.x];
-    Vec2d uv1 = uv[tri.y];
-    Vec2d uv2 = uv[tri.z];
-    Vec3d normal = normals[iNearTri];
+    Vec3d v0 = verts[nearTri.x];
+    Vec3d v1 = verts[nearTri.y];
+    Vec3d v2 = verts[nearTri.z];
+    Vec2d uv0 = uv[nearTri.x];
+    Vec2d uv1 = uv[nearTri.y];
+    Vec2d uv2 = uv[nearTri.z];
+    Vec3d normal = nearNormal;
 
     hit->shape = this;
     hit->distance = nearDist;

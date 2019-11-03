@@ -77,6 +77,7 @@ Shape* Shape::createShape(Value& shapeSpec) {
             auto tri = tris[i].GetArray();
             mesh->addTri(tri[0].GetInt(), tri[1].GetInt(), tri[2].GetInt());
         }
+        mesh->bake();
         newShape = mesh;
     }
 
@@ -107,7 +108,7 @@ Shape* Shape::createShape(Value& shapeSpec) {
             if (tri.x >= nvert) continue;
             mesh->addTri(tri.x, tri.y, tri.z, vnormals[tri.x]);
         }
-
+        mesh->bake();
         newShape = mesh;
         delete vnormals;
     }

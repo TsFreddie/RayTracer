@@ -45,7 +45,7 @@ void Scene::createScene(Value& sceneSpecs) {
         backgroundColor = Vec3d(0, 0, 0);
     }
 
-    // bvhVector.push_back(new BVH(shapes, 0, (int)shapes.size()));
+    bvhVector.push_back(new BVH(shapes, 0, (int)shapes.size()));
 }
 
 std::vector<Shape*>::iterator Scene::itShapeBegin() {

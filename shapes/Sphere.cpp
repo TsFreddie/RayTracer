@@ -7,7 +7,7 @@
 
 namespace rt {
 
-Sphere::Sphere(Vec3d center, double radius): center(center), radius(radius){
+Sphere::Sphere(Vec3d center, double radius) : center(center), radius(radius) {
     extendBound(center + Vec3d(1, 1, 1) * radius);
     extendBound(center + Vec3d(-1, -1, -1) * radius);
 }
@@ -23,20 +23,19 @@ Sphere::Sphere(Vec3d center, double radius): center(center), radius(radius){
  */
 double Sphere::intersect(Ray ray, Hit *hit) {
     Vec3d l = center - ray.origin;
-    double tca = l.dotProduct(ray.direction);  // Closest approach
-    if (tca < 0) return -1;  // Ray intersection behind ray origin
+    double tca = l.dotProduct(ray.direction);
+    if (tca < 0) return -1;
     double d2 = l.dotProduct(l) - tca * tca;
-    if (d2 > radius * radius) return -1;  // Ray doesn't intersect
+    if (d2 > radius * radius) return -1;
 
-    double thc =
-        sqrt(radius * radius - d2);  // Closest approach to surface of sphere
+    double thc = sqrt(radius * radius - d2);
     double t0 = tca - thc;
     double t1 = tca + thc;
 
     double distance = ((t0 < t1) ? t0 : t1);
 
     if (!hit) return distance;
-    
+
     hit->distance = distance;
     hit->shape = this;
     hit->point = ray.origin + (ray.direction * distance);

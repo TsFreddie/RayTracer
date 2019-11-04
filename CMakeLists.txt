@@ -15,10 +15,9 @@ parsers/rapidjson/*.h
 file (GLOB source
 main/*.cpp
 core/*.cpp
-cameras/*.cpp
-lights/*.cpp
 shapes/*.cpp
 materials/*.cpp
+samplers/*.cpp
 )
 
 

@@ -18,6 +18,7 @@ class BlinnPhong : public Material {
     BlinnPhong();
     BlinnPhong(double ka, double ks, double kd, double specular);
     Vec3d Shade(LightSource *light, Hit hit, Vec3d view);
+    double getAmbient();
 
    private:
     double ka;

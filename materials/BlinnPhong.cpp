@@ -10,7 +10,7 @@
 namespace rt {
 
 BlinnPhong::BlinnPhong() : Material() {
-    this->ka = 0;
+    this->ka = 1;
     this->ks = 0;
     this->kd = 0;
     this->specular = 0;
@@ -22,6 +22,10 @@ BlinnPhong::BlinnPhong(double ka, double ks, double kd, double specular)
     this->ks = ks;
     this->kd = kd;
     this->specular = specular;
+}
+
+double BlinnPhong::getAmbient() {
+    return ka;
 }
 
 Vec3d BlinnPhong::Shade(LightSource *light, Hit hit, Vec3d view) {

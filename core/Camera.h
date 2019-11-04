@@ -8,6 +8,7 @@
 
 #include "math/geometry.h"
 #include "rapidjson/document.h"
+#include "core/Sampler.h"
 
 using namespace rapidjson;
 
@@ -18,15 +19,13 @@ class Camera {
     //
     // Constructors
     //
-    Camera(){};
-    Camera(int height, int width, int fov) : height(height), width(width) {
-        this->setFov(fov);
-    };
+    Camera();
+    Camera(int height, int width, double fov);
 
     //
     // Destructor
     //
-    virtual ~Camera();
+    ~Camera();
 
     //
     // factory function : returns camera instance dynamically based on camera
@@ -37,7 +36,9 @@ class Camera {
     //
     // print function (to be implemented by the subclasses )
     //
-    virtual void printCamera() = 0;
+    void printCamera() {
+
+    }
 
     //
     // other camera functions (to complete)
@@ -50,9 +51,10 @@ class Camera {
     void setHeight(int height) { this->height = height; }
     int getWidth() const { return width; }
     void setWidth(int width) { this->width = width; }
-    int getFovDeg() const { return (int)round(fov * 45.0 / atan(1) * 2); }
+    double getFovDeg() const { return (fov * 45.0 / atan(1) * 2); }
     double getFov() const { return fov; }
-    void setFov(int fov) { this->fov = 0.5 * fov * atan(1) / 45.0; }
+    void setFov(double fov) { this->fov = 0.5 * fov * atan(1) / 45.0; }
+    Sampler *getSampler();
 
    protected:
     //
@@ -61,6 +63,7 @@ class Camera {
     int height;
     int width;
     double fov;  // field of view
+    Sampler *sampler;
 };
 
 }  // namespace rt

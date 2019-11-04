@@ -21,21 +21,21 @@ class TriMesh : public Shape {
     //
     // Constructors
     //
-    TriMesh(int nvert, int ntri);
+    TriMesh(int nverts, int ntris);
 
     void addVert(Vec3d p, Vec2d uv);
     void addTri(int a, int b, int c);
     void addTri(int a, int b, int c, Vec3d n);
     double intersect(Ray ray, Hit *hit);
-    void bake();
+    void optimize();
 
     ~TriMesh();
 
    private:
-    int cvert;
-    int ctri;
-    int nvert;
-    int ntri;
+    int cverts;
+    int ctris;
+    int nverts;
+    int ntris;
     Vec3d *verts;
     Vec2d *uv;
 

@@ -18,7 +18,7 @@ Shape::Shape() {
     material = NULL;
 }
 
-Shape* Shape::createShape(Value& shapeSpec) {
+Shape* Shape::createShape(Value& shapeSpec, bool useBVH) {
     std::string shapeType = shapeSpec["type"].GetString();
 
     Shape* newShape = NULL;
@@ -61,11 +61,11 @@ Shape* Shape::createShape(Value& shapeSpec) {
         auto uvs = shapeSpec["uv"].GetArray();
         auto tris = shapeSpec["tris"].GetArray();
 
-        int nvert = vertices.Size() < uvs.Size() ? vertices.Size() : uvs.Size();
-        int ntri = tris.Size();
+        int nverts = vertices.Size() < uvs.Size() ? vertices.Size() : uvs.Size();
+        int ntris = tris.Size();
 
-        TriMesh* mesh = new TriMesh(nvert, ntri);
-        for (int i = 0; i < nvert; ++i) {
+        TriMesh* mesh = new TriMesh(nverts, ntris);
+        for (int i = 0; i < nverts; ++i) {
             auto vt = vertices[i].GetArray();
             auto uv = uvs[i].GetArray();
             mesh->addVert(
@@ -73,27 +73,27 @@ Shape* Shape::createShape(Value& shapeSpec) {
                 Vec2d(uv[0].GetDouble(), uv[1].GetDouble()));
         }
 
-        for (int i = 0; i < ntri; ++i) {
+        for (int i = 0; i < ntris; ++i) {
             auto tri = tris[i].GetArray();
             mesh->addTri(tri[0].GetInt(), tri[1].GetInt(), tri[2].GetInt());
         }
-        mesh->bake();
+        if (useBVH) mesh->optimize();
         newShape = mesh;
     }
 
     if (shapeType.compare("ply") == 0) {
-        const char* filename = shapeSpec["file"].GetString();
-        PLYReader ply(filename);
+        std::string filename = shapeSpec["file"].GetString();
+        PLYReader ply(filename.c_str());
 
-        int nvert = ply.nVert();
-        int ntri = ply.nTri();
+        int nverts = ply.nVert();
+        int ntris = ply.nTri();
 
-        if (nvert < 0 || ntri < 0) return NULL;
+        if (nverts < 0 || ntris < 0) return NULL;
 
-        Vec3d* vnormals = new Vec3d[nvert];
-        TriMesh* mesh = new TriMesh(nvert, ntri);
+        Vec3d* vnormals = new Vec3d[nverts];
+        TriMesh* mesh = new TriMesh(nverts, ntris);
 
-        for (int i = 0; i < nvert; ++i) {
+        for (int i = 0; i < nverts; ++i) {
             Vec3d vert, normal;
             Vec2d uv;
 
@@ -102,13 +102,13 @@ Shape* Shape::createShape(Value& shapeSpec) {
             vnormals[i] = normal;
         }
 
-        for (int i = 0; i < ntri; ++i) {
+        for (int i = 0; i < ntris; ++i) {
             Vec3i tri;
             if (!ply.ReadTri(tri)) continue;
-            if (tri.x >= nvert) continue;
+            if (tri.x >= nverts) continue;
             mesh->addTri(tri.x, tri.y, tri.z, vnormals[tri.x]);
         }
-        mesh->bake();
+        if (useBVH) mesh->optimize();
         newShape = mesh;
         delete vnormals;
     }

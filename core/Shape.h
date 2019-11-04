@@ -33,7 +33,7 @@ class Shape {
     //
     virtual double intersect(Ray, Hit*) = 0;
 
-    static Shape* createShape(Value& shapeSpec);
+    static Shape* createShape(Value& shapeSpec, bool useBVH);
     Material* getMaterial() { return material; }
     Bound getBound() { return bound; }
     void extendBound(Vec3d point);

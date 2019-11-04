@@ -2,10 +2,12 @@
 	"nbounces": 3,
 
 	"camera": {
-		"type": "pinhole",
+		"type": "thinlen",
 		"width": 800,
 		"height": 800,
-		"fov": 45
+		"fov": 45,
+		"focusdistance": 1,
+		"aperture": 0.1
 	},
 	"scene": {
 		"backgroundcolor": [ 0.1, 0.1, 0.1 ],

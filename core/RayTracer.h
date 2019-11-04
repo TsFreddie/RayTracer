@@ -21,7 +21,8 @@ class RayTracer {
 
     static Ray createPrimRay(Camera* camera, int x, int y);
     static Ray createShadowRay(Hit hit, Vec3d lightPos);
-    static Ray createSecondaryRay(Ray inRay, Hit hit, float randomness);
+    static Ray createReflectionRay(Ray inRay, Hit hit);
+    static Ray createRefractionRay(Ray inRay, Hit hit, bool inside);
 
     static Vec3d traceRay(Scene* scene, Ray ray, int nbounce);
 

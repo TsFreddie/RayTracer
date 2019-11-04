@@ -16,17 +16,28 @@ Material::Material() {
     roughness = new PPMTexture();
     roughness->solid(0);
     diffuse = new PPMTexture();
+    refractiveIndex = 1;
+    invRIndex = 1;
 }
 
 double Material::getTransmit(Vec2d uv) { return transmit->getValue(uv); }
 double Material::getRoughness(Vec2d uv) { return roughness->getValue(uv); }
 double Material::getMetallic(Vec2d uv) { return metallic->getValue(uv); }
+double Material::getAmbient() { return 0; }
 Vec3d Material::getDiffuse(Vec2d uv) {
     return diffuseColor * diffuse->getChannels(uv);
 }
+double Material::getRefractiveIndex(bool inverse) { 
+    if (inverse) return refractiveIndex;
+    return invRIndex;
+}
+void Material::setRefractiveIndex(double index) {
+    invRIndex = 1 / index;
+    refractiveIndex = index;
+}
 
 Material* Material::createMaterial(Value& matSpec) {
-    double ka = 0;
+    double ka = 1;
     double ks = 0;
     double kd = 0;
     double specular = 0;
@@ -89,6 +100,11 @@ Material* Material::createMaterial(Value& matSpec) {
         } else if (matSpec["transmit"].IsString()) {
             newMat->transmit->file(matSpec["transmit"].GetString());
         }
+    }
+
+    if (matSpec.HasMember("refractiveindex") &&
+        matSpec["refractiveindex"].IsNumber()) {
+        newMat->setRefractiveIndex(matSpec["refractiveindex"].GetDouble());
     }
 
     return newMat;

@@ -25,16 +25,21 @@ class Material {
         return diffuseColor;
     };
 
-    double getTransmit(Vec2d uv);
-    double getRoughness(Vec2d uv);
-    double getMetallic(Vec2d uv);
-    Vec3d getDiffuse(Vec2d uv);
+    virtual double getTransmit(Vec2d uv);
+    virtual double getRoughness(Vec2d uv);
+    virtual double getMetallic(Vec2d uv);
+    virtual double getAmbient();
+    virtual Vec3d getDiffuse(Vec2d uv);
+    virtual double getRefractiveIndex(bool inverse);
+    virtual void setRefractiveIndex(double index);
 
    private:
     PPMTexture *transmit;   // transparency
     PPMTexture *roughness;  // glossiness
-    PPMTexture *metallic;   // reflectivity
+    PPMTexture *metallic;
     PPMTexture *diffuse;
+    double refractiveIndex;
+    double invRIndex;
     Vec3d diffuseColor;
 };
 

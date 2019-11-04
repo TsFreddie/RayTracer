@@ -6,6 +6,12 @@
 
 namespace rt {
 
+Scene::Scene() {
+    bvh = NULL;
+    backgroundColor = Vec3d(0);
+    ambientIntensity = Vec3d(0);
+}
+
 /**
  * Parses json scene object to generate scene to render
  *
@@ -13,6 +19,10 @@ namespace rt {
  */
 void Scene::createScene(Value& sceneSpecs) {
     //----------parse json object to populate scene-----------
+    bool useBVH = true;
+    if (sceneSpecs.HasMember("bvh") && sceneSpecs["bvh"].IsBool()) {
+        useBVH = sceneSpecs["bvh"].GetBool();
+    }
 
     // Populate shapes
     if (sceneSpecs.HasMember("shapes")) {
@@ -20,7 +30,7 @@ void Scene::createScene(Value& sceneSpecs) {
         SizeType nshapes = shapeSpecs.Size();
         for (SizeType i = 0; i < nshapes; i++) {
             Value& curShapeSpec = shapeSpecs[i];
-            Shape* newShape = Shape::createShape(curShapeSpec);
+            Shape* newShape = Shape::createShape(curShapeSpec, useBVH);
             if (newShape != NULL) shapes.push_back(newShape);
         }
     }
@@ -41,30 +51,22 @@ void Scene::createScene(Value& sceneSpecs) {
         Value& bcSpecs = sceneSpecs["backgroundcolor"];
         backgroundColor = Vec3d(bcSpecs[0].GetDouble(), bcSpecs[1].GetDouble(),
                                 bcSpecs[2].GetDouble());
-    } else {
-        backgroundColor = Vec3d(0, 0, 0);
     }
 
-    bvhVector.push_back(new BVH(shapes, 0, (int)shapes.size()));
-}
+    if (sceneSpecs.HasMember("ambientintensity")) {
+        Value& acSpecs = sceneSpecs["ambientintensity"];
+        ambientIntensity = Vec3d(acSpecs[0].GetDouble(), acSpecs[1].GetDouble(),
+                                acSpecs[2].GetDouble());
+    }
 
-std::vector<Shape*>::iterator Scene::itShapeBegin() {
-    if (bvhVector.size() > 0) {
-        return bvhVector.begin();
+    if (useBVH) {
+        bvh = new BVH(shapes, 0, (int)shapes.size());
     }
-    return shapes.begin();
-}
-std::vector<Shape*>::iterator Scene::itShapeEnd() {
-    if (bvhVector.size() > 0) {
-        return bvhVector.end();
-    }
-    return shapes.end();
 }
 
 Scene::~Scene() {
-    for (auto it = bvhVector.begin(); it != bvhVector.end(); ++it) {
-        delete *it;
-    }
+    if (bvh != NULL) delete bvh;
+    bvh = NULL;
 
     for (auto it = shapes.begin(); it != shapes.end(); ++it) {
         delete *it;

@@ -12,8 +12,8 @@
 
 #include "core/LightSource.h"
 #include "core/Shape.h"
-#include "shapes/BVH.h"
 #include "math/geometry.h"
+#include "shapes/BVH.h"
 
 using namespace rapidjson;
 
@@ -21,28 +21,33 @@ namespace rt {
 
 class Scene {
    public:
-    Scene(){};
+    Scene();
 
-    void createScene(Value& scenespecs);
-    std::vector<Shape*>::iterator itShapeBegin();
-    std::vector<Shape*>::iterator itShapeEnd();
+    void createScene(Value &scenespecs);
 
-    std::vector<LightSource*>::iterator itLightBegin() {
+    BVH *getBVH() { return bvh; }
+    std::vector<Shape *>::iterator itShapeBegin() { return shapes.begin(); }
+
+    std::vector<Shape *>::iterator itShapeEnd() { return shapes.end(); }
+
+    std::vector<LightSource *>::iterator itLightBegin() {
         return lightSources.begin();
     }
-    std::vector<LightSource*>::iterator itLightEnd() {
+    std::vector<LightSource *>::iterator itLightEnd() {
         return lightSources.end();
     }
 
     Vec3d getBackgroundColor() { return backgroundColor; }
+    Vec3d getAmbientIntensity() { return ambientIntensity; }
 
     ~Scene();
 
    private:
-    std::vector<Shape*> bvhVector;
-    std::vector<LightSource*> lightSources;
-    std::vector<Shape*> shapes;
+    BVH *bvh;
+    std::vector<LightSource *> lightSources;
+    std::vector<Shape *> shapes;
     Vec3d backgroundColor;
+    Vec3d ambientIntensity;
 };
 
 }  // namespace rt

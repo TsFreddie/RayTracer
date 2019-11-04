@@ -37,9 +37,8 @@ Ray RayTracer::createShadowRay(Hit hit, Vec3d lightPos) {
     return ray;
 }
 
-Ray RayTracer::createSecondaryRay(Ray inRay, Hit hit, float randomness = 0) {
+Ray RayTracer::createReflectionRay(Ray inRay, Hit hit) {
     Ray outRay;
-    // TODO: randomness
     outRay.raytype = SECONDARY;
     outRay.direction = inRay.direction -
                        hit.normal * 2 * inRay.direction.dotProduct(hit.normal);
@@ -49,17 +48,46 @@ Ray RayTracer::createSecondaryRay(Ray inRay, Hit hit, float randomness = 0) {
     return outRay;
 }
 
+Ray RayTracer::createRefractionRay(Ray inRay, Hit hit, bool inside) {
+    Ray outRay;
+    Vec3d normal = hit.normal;
+    outRay.raytype = SECONDARY;
+    double ratio = hit.shape->getMaterial()->getRefractiveIndex(inside);
+    double costheta = -normal.dotProduct(inRay.direction);
+    double k = 1 - ratio * ratio * (1 - costheta * costheta);
+
+    outRay.direction =
+        (inRay.direction * ratio + normal * (ratio * costheta - sqrt(k)))
+            .normalize();
+    outRay.origin = hit.point - hit.normal * BIAS;
+    outRay.invDir = 1.0 / outRay.direction;
+
+    return outRay;
+}
+
 Vec3d RayTracer::traceRay(Scene* scene, Ray ray, int nbounces) {
     Hit nearHit;
     nearHit.distance = INFINITY;
     nearHit.shape = NULL;
+    BVH* bvh = scene->getBVH();
 
-    for (auto it = scene->itShapeBegin(); it != scene->itShapeEnd(); ++it) {
-        auto shape = *it;
+    if (bvh != NULL) {
+        // Use BVH
         Hit hit;
-        if (shape->intersect(ray, &hit) >= 0) {
+        if (bvh->intersect(ray, &hit) >= 0) {
             if (hit.distance < nearHit.distance) {
                 nearHit = hit;
+            }
+        }
+    } else {
+        // Use Iterate
+        for (auto it = scene->itShapeBegin(); it != scene->itShapeEnd(); ++it) {
+            auto shape = *it;
+            Hit hit;
+            if (shape->intersect(ray, &hit) >= 0) {
+                if (hit.distance < nearHit.distance) {
+                    nearHit = hit;
+                }
             }
         }
     }
@@ -75,44 +103,77 @@ Vec3d RayTracer::traceRay(Scene* scene, Ray ray, int nbounces) {
 
     // TODO: camera transformation
     Vec3d view = (Vec3d(0, 0, 0) - nearHit.point).normalize();
-    // TODO: add ambient
-    Vec3d color(0, 0, 0);
+
+    Material* hitMat = nearHit.shape->getMaterial();
+    Vec3d color = hitMat->getAmbient() * scene->getAmbientIntensity();
 
     // Shading
     for (auto it = scene->itLightBegin(); it != scene->itLightEnd(); ++it) {
         auto light = *it;
 
-        bool inShadow = false;
-        Ray shadowRay = createShadowRay(nearHit, light->getPosition());
+        Vec3d lightDirection = light->getPosition() - nearHit.point;
 
-        for (auto it2 = scene->itShapeBegin(); it2 != scene->itShapeEnd();
-             ++it2) {
-            auto shape = *it2;
-            if (shape->intersect(shadowRay, NULL) >= 0) {
-                inShadow = true;
-                break;
+        Sampler* sampler = light->getSampler();
+        int nsamples = sampler->count();
+        int shadowHits = 0;
+        sampler->reset(lightDirection);
+        for (int i = 0; i < nsamples; ++i) {
+            Vec3d offset = sampler->next();
+
+            Vec3d target = light->getPosition() + offset;
+            Ray shadowRay = createShadowRay(nearHit, target);
+
+            if (bvh != NULL) {
+                if (bvh->intersect(shadowRay, NULL) >= 0) {
+                    shadowHits += 1;
+                }
+            } else {
+                for (auto it2 = scene->itShapeBegin();
+                     it2 != scene->itShapeEnd(); ++it2) {
+                    auto shape = *it2;
+                    if (shape->intersect(shadowRay, NULL) >= 0) {
+                        shadowHits += 1;
+                        break;
+                    }
+                }
             }
         }
 
-        if (!inShadow) {
-            color = color +
-                    nearHit.shape->getMaterial()->Shade(light, nearHit, view);
-        }
+        double shadowAmount = shadowHits / (double)nsamples;
+
+        color =
+            color + nearHit.shape->getMaterial()->Shade(light, nearHit, view) *
+                        (1 - shadowAmount);
     }
 
     if (nbounces < 0) {
         return color;
     }
 
-    Material* hitMat = nearHit.shape->getMaterial();
-
-    // If have reflection, do reflection
-    if (hitMat->getMetallic(nearHit.uv) > 0) {
-        Ray R = createSecondaryRay(ray, nearHit);
-
-        Vec3d reflectionColor = traceRay(scene, R, nbounces - 1);
-        color = color + reflectionColor * hitMat->getMetallic(nearHit.uv);
+    // If have reflection or refraction, do those
+    Vec3d reflectionColor(0);
+    Vec3d refractionColor(0);
+    double metallic = hitMat->getMetallic(nearHit.uv);
+    double transmit = hitMat->getTransmit(nearHit.uv);
+    bool inside = false;
+    if (ray.direction.dotProduct(nearHit.normal) > 0) {
+        inside = true;
+        nearHit.normal = -nearHit.normal;
     }
+
+    if (metallic > 0 && transmit < 1) {
+        Ray R = createReflectionRay(ray, nearHit);
+        reflectionColor =
+            traceRay(scene, R, nbounces - 1) * metallic;
+    }
+
+    if (transmit > 0) {
+        Ray T = createRefractionRay(ray, nearHit, inside);
+        refractionColor = traceRay(scene, T, nbounces - 1);
+    }
+
+    color = color + reflectionColor * (1 - transmit) +
+            refractionColor * transmit;
 
     return color;
 }

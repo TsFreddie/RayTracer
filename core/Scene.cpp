@@ -3,6 +3,8 @@
  *
  */
 #include "Scene.h"
+#include "samplers/Jittered.h"
+#include "samplers/Random.h"
 
 namespace rt {
 
@@ -10,6 +12,7 @@ Scene::Scene() {
     bvh = NULL;
     backgroundColor = Vec3d(0);
     ambientIntensity = Vec3d(0);
+    sampler = NULL;
 }
 
 /**
@@ -56,17 +59,47 @@ void Scene::createScene(Value& sceneSpecs) {
     if (sceneSpecs.HasMember("ambientintensity")) {
         Value& acSpecs = sceneSpecs["ambientintensity"];
         ambientIntensity = Vec3d(acSpecs[0].GetDouble(), acSpecs[1].GetDouble(),
-                                acSpecs[2].GetDouble());
+                                 acSpecs[2].GetDouble());
     }
 
     if (useBVH) {
         bvh = new BVH(shapes, 0, (int)shapes.size());
     }
+
+    int nsamples = 1;
+    bool isRandom = false;
+    if (sceneSpecs.HasMember("nsamples") && sceneSpecs["nsamples"].IsInt()) {
+        nsamples = sceneSpecs["nsamples"].GetInt();
+    }
+
+    if (sceneSpecs.HasMember("sampler") && sceneSpecs["sampler"].IsString()) {
+        std::string sampler = sceneSpecs["sampler"].GetString();
+        if (sampler.compare("random") == 0) {
+            isRandom = true;
+        }
+    }
+
+    if (isRandom) {
+        sampler = new Random(nsamples, 1);
+    } else {
+        sampler = new Jittered(nsamples, 1);
+    }
+}
+
+Sampler* Scene::getSampler() {
+    if (sampler == NULL) {
+        sampler = new Jittered(4, 1);
+    }
+
+    return sampler;
 }
 
 Scene::~Scene() {
     if (bvh != NULL) delete bvh;
     bvh = NULL;
+
+    if (sampler != NULL) delete sampler;
+    sampler = NULL;
 
     for (auto it = shapes.begin(); it != shapes.end(); ++it) {
         delete *it;

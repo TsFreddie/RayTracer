@@ -11,16 +11,11 @@
 
 namespace rt {
 
-Camera::Camera() {
-    sampler = NULL;
-    height = 0;
-    width = 0;
-    fov = 0;
-}
 Camera::Camera(int height, int width, double fov)
     : height(height), width(width) {
     this->setFov(fov);
     sampler = NULL;
+    focusdistance = 1.0;
 }
 Camera::~Camera() {
     if (sampler != NULL) delete sampler;

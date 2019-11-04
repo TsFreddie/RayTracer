@@ -7,7 +7,7 @@
 namespace rt {
 
 // Calculate primary ray
-Ray RayTracer::createPrimRay(Camera* camera, int x, int y) {
+Ray RayTracer::calcPrimRay(Camera* camera, int x, int y) {
     int width = camera->getWidth();
     int height = camera->getHeight();
     double fov = camera->getFov();
@@ -16,7 +16,7 @@ Ray RayTracer::createPrimRay(Camera* camera, int x, int y) {
 
     Ray ray;
     ray.raytype = PRIMARY;
-    ray.origin = Vec3d(0, 0, 0);  // TODO: give camera position & look at
+    ray.origin = Vec3d(0, 0, 0);  // TODO: camera transformation
 
     double rx = (2 * ((x + 0.5) / (double)width) - 1) * tan(fov) * ratio;
     double ry = (1 - 2 * ((y + 0.5) / (double)height)) * tan(fov);
@@ -27,7 +27,7 @@ Ray RayTracer::createPrimRay(Camera* camera, int x, int y) {
     return ray;
 }
 
-Ray RayTracer::createShadowRay(Hit hit, Vec3d lightPos) {
+Ray RayTracer::calcShadowRay(Hit hit, Vec3d lightPos) {
     Ray ray;
     ray.raytype = SHADOW;
     ray.direction = (lightPos - hit.point).normalize();
@@ -37,7 +37,7 @@ Ray RayTracer::createShadowRay(Hit hit, Vec3d lightPos) {
     return ray;
 }
 
-Ray RayTracer::createReflectionRay(Ray inRay, Hit hit) {
+Ray RayTracer::calcReflectionRay(Ray inRay, Hit hit) {
     Ray outRay;
     outRay.raytype = SECONDARY;
     outRay.direction = inRay.direction -
@@ -48,7 +48,7 @@ Ray RayTracer::createReflectionRay(Ray inRay, Hit hit) {
     return outRay;
 }
 
-Ray RayTracer::createRefractionRay(Ray inRay, Hit hit, bool inside) {
+Ray RayTracer::calcRefractionRay(Ray inRay, Hit hit, bool inside) {
     Ray outRay;
     Vec3d normal = hit.normal;
     outRay.raytype = SECONDARY;
@@ -113,6 +113,7 @@ Vec3d RayTracer::traceRay(Scene* scene, Ray ray, int nbounces) {
 
         Vec3d lightDirection = light->getPosition() - nearHit.point;
 
+        // Shadow sampling
         Sampler* sampler = light->getSampler();
         int nsamples = sampler->count();
         int shadowHits = 0;
@@ -121,7 +122,7 @@ Vec3d RayTracer::traceRay(Scene* scene, Ray ray, int nbounces) {
             Vec3d offset = sampler->next();
 
             Vec3d target = light->getPosition() + offset;
-            Ray shadowRay = createShadowRay(nearHit, target);
+            Ray shadowRay = calcShadowRay(nearHit, target);
 
             if (bvh != NULL) {
                 if (bvh->intersect(shadowRay, NULL) >= 0) {
@@ -155,25 +156,63 @@ Vec3d RayTracer::traceRay(Scene* scene, Ray ray, int nbounces) {
     Vec3d refractionColor(0);
     double metallic = hitMat->getMetallic(nearHit.uv);
     double transmit = hitMat->getTransmit(nearHit.uv);
+    double roughness = hitMat->getRoughness(nearHit.uv);
     bool inside = false;
     if (ray.direction.dotProduct(nearHit.normal) > 0) {
         inside = true;
         nearHit.normal = -nearHit.normal;
     }
 
+    // Roughness sampling
+    Sampler* sampler = scene->getSampler();
+    int nsamples = sampler->count();
+
     if (metallic > 0 && transmit < 1) {
-        Ray R = createReflectionRay(ray, nearHit);
-        reflectionColor =
-            traceRay(scene, R, nbounces - 1) * metallic;
+        Ray truthR = calcReflectionRay(ray, nearHit);
+        sampler->reset(truthR.direction);
+        if (roughness > 0) {
+            for (int i = 0; i < nsamples; ++i) {
+                Vec3d offset = sampler->next();
+                Vec3d target = truthR.origin + truthR.direction + offset * roughness;
+                Ray R;
+                R.direction = (target - nearHit.point).normalize();
+                R.invDir = 1.0 / R.direction;
+                R.origin = truthR.origin;
+                R.raytype = SECONDARY;
+                reflectionColor =
+                    reflectionColor + traceRay(scene, R, nbounces - 1);
+            }
+            reflectionColor =
+                reflectionColor * (1 / (double)nsamples) * metallic;
+        } else {
+            reflectionColor = traceRay(scene, truthR, nbounces - 1) * metallic;
+        }
     }
 
     if (transmit > 0) {
-        Ray T = createRefractionRay(ray, nearHit, inside);
-        refractionColor = traceRay(scene, T, nbounces - 1);
+        Ray truthT = calcRefractionRay(ray, nearHit, inside);
+        sampler->reset(truthT.direction);
+        if (roughness > 0) {
+            for (int i = 0; i < nsamples; ++i) {
+                Vec3d offset = sampler->next();
+                Vec3d target = truthT.origin + truthT.direction + offset * roughness;
+                Ray T;
+                T.direction = (target - nearHit.point).normalize();
+                T.invDir = 1.0 / T.direction;
+                T.origin = truthT.origin;
+                T.raytype = SECONDARY;
+                refractionColor =
+                    refractionColor + traceRay(scene, T, nbounces - 1);
+            }
+            refractionColor =
+                refractionColor * (1 / (double)nsamples);
+        } else {
+            refractionColor = traceRay(scene, truthT, nbounces - 1);
+        }
     }
 
-    color = color + reflectionColor * (1 - transmit) +
-            refractionColor * transmit;
+    color =
+        color + reflectionColor * (1 - transmit) + refractionColor * transmit;
 
     return color;
 }
@@ -194,8 +233,43 @@ Vec3d* RayTracer::render(Camera* camera, Scene* scene, int nbounces) {
 
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
-            Ray pr = createPrimRay(camera, x, y);
-            pixelbuffer[y * width + x] = traceRay(scene, pr, nbounces);
+            if (x == 400 && y == 400) {
+                int haha = 0;
+            }
+
+            // Camera sampling
+            Ray truthRay = calcPrimRay(camera, x, y);
+            Vec3d focusPlaneOrigin =
+                Vec3d(0, 0, -1) * camera->getFocusDistance();
+            Vec3d focusPlaneNormal = Vec3d(0, 0, -1);
+            double nd = focusPlaneNormal.dotProduct(truthRay.direction);
+            if (abs(nd) < 1e-6) {
+                // parallel. not likely to happen
+                continue;
+            }
+            Vec3d vo = focusPlaneOrigin - truthRay.origin;
+            double distance = vo.dotProduct(focusPlaneNormal) / nd;
+
+            Vec3d focusPoint = truthRay.origin + truthRay.direction * distance;
+
+            Vec3d sampleColor(0);
+
+            Sampler* sampler = camera->getSampler();
+            int nsamples = sampler->count();
+            // TODO: camera transformation
+            sampler->reset(Vec3d(0, 0, -1));
+            for (int s = 0; s < nsamples; ++s) {
+                Ray sampleRay;
+                sampleRay.origin = sampler->next() + truthRay.origin;
+                sampleRay.direction =
+                    (focusPoint - sampleRay.origin).normalize();
+                sampleRay.invDir = 1.0 / sampleRay.direction;
+                sampleRay.raytype = PRIMARY;
+
+                sampleColor =
+                    sampleColor + traceRay(scene, sampleRay, nbounces);
+            }
+            pixelbuffer[y * width + x] = sampleColor * (1 / (double)nsamples);
         }
     }
 

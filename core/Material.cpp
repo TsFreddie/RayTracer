@@ -77,7 +77,6 @@ Material* Material::createMaterial(Value& matSpec) {
         newMat->diffuse->file(matSpec["diffuse"].GetString());
     }
 
-    // TODO: property texture
     if (matSpec.HasMember("metallic")) {
         if (matSpec["metallic"].IsNumber()) {
             newMat->metallic->solid(matSpec["metallic"].GetDouble());

@@ -19,7 +19,6 @@ class Camera {
     //
     // Constructors
     //
-    Camera();
     Camera(int height, int width, double fov);
 
     //
@@ -48,12 +47,11 @@ class Camera {
     // Getters and Setters
     //
     int getHeight() const { return height; }
-    void setHeight(int height) { this->height = height; }
     int getWidth() const { return width; }
-    void setWidth(int width) { this->width = width; }
     double getFovDeg() const { return (fov * 45.0 / atan(1) * 2); }
     double getFov() const { return fov; }
     void setFov(double fov) { this->fov = 0.5 * fov * atan(1) / 45.0; }
+    double getFocusDistance() { return focusdistance; }
     Sampler *getSampler();
 
    protected:
@@ -63,6 +61,7 @@ class Camera {
     int height;
     int width;
     double fov;  // field of view
+    double focusdistance;
     Sampler *sampler;
 };
 

@@ -1,5 +1,5 @@
 {
-	"nbounces": 3,
+	"nbounces": 1,
 
 	"camera": {
 		"type": "thinlen",
@@ -7,11 +7,14 @@
 		"height": 800,
 		"fov": 45,
 		"focusdistance": 1,
-		"aperture": 0.1
+		"nsamples": 4,
+		"size": 0.1
 	},
 	"scene": {
 		"backgroundcolor": [ 0.1, 0.1, 0.1 ],
 		"ambientintensity": [ 0, 0.02, 0.05 ],
+		"sampler": "jittered",
+		"nsamples": 32,
 		"bvh": true,
 		"lightsources": [
 			{
@@ -20,7 +23,7 @@
 				"intensity": [ 0.15, 0.15, 0.15 ]
 			},
 			{
-				"type": "pointlight",
+				"type": "arealight",
 				"position": [ -0.2, 0.233844, 0.08654 ],
 				"intensity": [ 0.7, 0.7, 0.7 ],
 				"sampler": "random",

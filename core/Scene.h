@@ -39,6 +39,7 @@ class Scene {
 
     Vec3d getBackgroundColor() { return backgroundColor; }
     Vec3d getAmbientIntensity() { return ambientIntensity; }
+    Sampler *getSampler();
 
     ~Scene();
 
@@ -48,6 +49,7 @@ class Scene {
     std::vector<Shape *> shapes;
     Vec3d backgroundColor;
     Vec3d ambientIntensity;
+    Sampler *sampler;
 };
 
 }  // namespace rt

@@ -19,10 +19,10 @@ class RayTracer {
    public:
     RayTracer();
 
-    static Ray createPrimRay(Camera* camera, int x, int y);
-    static Ray createShadowRay(Hit hit, Vec3d lightPos);
-    static Ray createReflectionRay(Ray inRay, Hit hit);
-    static Ray createRefractionRay(Ray inRay, Hit hit, bool inside);
+    static Ray calcPrimRay(Camera* camera, int x, int y);
+    static Ray calcShadowRay(Hit hit, Vec3d lightPos);
+    static Ray calcReflectionRay(Ray inRay, Hit hit);
+    static Ray calcRefractionRay(Ray inRay, Hit hit, bool inside);
 
     static Vec3d traceRay(Scene* scene, Ray ray, int nbounce);
 

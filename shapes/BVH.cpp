@@ -70,7 +70,6 @@ BVH::BVH(std::vector<Shape *> shapes, int begin, int end) {
 }
 
 double BVH::intersect(Ray ray, Hit *hit) {
-    // TODO: redo
     double t1, t2, t3, t4, t5, t6;
     t1 = (bound.min.x - ray.origin.x) * ray.invDir.x;
     t2 = (bound.max.x - ray.origin.x) * ray.invDir.x;

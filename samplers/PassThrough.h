@@ -12,7 +12,8 @@ namespace rt {
 
 class PassThrough : public Sampler {
    public:
-    void reset(Vec3d normal) {}
+    void reset(Vec3d _) {}
+    void resize(double _) {}
     int count() { return 1; }
     Vec3d next() { return Vec3d(0,0,0); }
 };

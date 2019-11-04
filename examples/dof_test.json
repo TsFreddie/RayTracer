@@ -1,0 +1,41 @@
+{
+	"nbounces": 1,
+
+	"camera": {
+		"type": "thinlen",
+		"width": 100,
+		"height": 100,
+		"fov": 45,
+		"focusdistance": 1,
+		"sampler": "jittered",
+		"nsamples": 1024,
+		"size": 0.1
+	},
+	"scene": {
+		"backgroundcolor": [ 0.1, 0.1, 0.1 ],
+		"nsamples": 4,
+		"lightsources": [
+			{
+				"type": "pointlight",
+				"position": [ -0.2, 0.233844, 0.08654 ],
+				"intensity": [ 1, 1, 1 ]
+			}
+		],
+		"shapes": [
+			{
+				"type": "sphere",
+				"center": [ 0.1, -0.1, -0.5 ],
+				"radius": 0.2,
+				"material": {
+					"ks": 0.3,
+					"kd": 0.8,
+					"specularexponent": 3,
+					"roughness": 0,
+					"transmit": 0,
+					"metallic": 0,
+					"diffusecolor": [1, 1, 1]
+				}
+			}
+		]
+	}
+}

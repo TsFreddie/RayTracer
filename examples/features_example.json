@@ -1,33 +1,29 @@
 {
-	"nbounces": 1,
+	"nbounces": 2,
 
 	"camera": {
 		"type": "thinlen",
-		"width": 800,
-		"height": 800,
+		"width": 400,
+		"height": 400,
 		"fov": 45,
 		"focusdistance": 1,
-		"nsamples": 4,
-		"size": 0.1
+		"sampler": "jittered",
+		"nsamples": 16,
+		"size": 0.05
 	},
 	"scene": {
 		"backgroundcolor": [ 0.1, 0.1, 0.1 ],
 		"ambientintensity": [ 0, 0.02, 0.05 ],
 		"sampler": "jittered",
-		"nsamples": 32,
+		"nsamples": 4,
 		"bvh": true,
 		"lightsources": [
 			{
-				"type": "pointlight",
-				"position": [ 0.15, 0.233844, 0.08654 ],
-				"intensity": [ 0.15, 0.15, 0.15 ]
-			},
-			{
 				"type": "arealight",
 				"position": [ -0.2, 0.233844, 0.08654 ],
-				"intensity": [ 0.7, 0.7, 0.7 ],
-				"sampler": "random",
-				"nsamples": 32,
+				"intensity": [ 1, 1, 1 ],
+				"sampler": "jittered",
+				"nsamples": 16,
 				"size": 0.1
 			}
 		],
@@ -59,16 +55,29 @@
 			},
 			{
 				"type": "sphere",
-				"center": [ 0.2, -0.3, -1.5 ],
+				"center": [ -0.2, -0.3, -1 ],
 				"radius": 0.1,
 				"material": {
 					"ks": 0.4,
 					"kd": 0.8,
 					"specularexponent": 3,
 					"transmit": 0.2,
-					"metallic": 1,
-					"refractiveindex": 1.1,
-					"diffusecolor": [ 0, 0, 0 ]
+					"metallic": "checkerboard",
+					"roughness": 0.3,
+					"diffusecolor": [ 0, 0, 0.5 ]
+
+				}
+			},
+			{
+				"type": "sphere",
+				"center": [ 0.2, -0.3, -1.5 ],
+				"radius": 0.1,
+				"material": {
+					"ks": 0.4,
+					"kd": 0.8,
+					"specularexponent": 3,
+					"metallic": 0,
+					"diffusecolor": [ 0, 0, 1 ]
 				}
 			},
 			{
@@ -111,7 +120,7 @@
 					"specularexponent": 0,
 					"diffusecolor": [ 1, 1, 1 ],
 					"diffuse": "examples/uvtest.ppm",
-					"metallic": "checkerboard"
+					"metallic": 0
 				}
 			}
 		]

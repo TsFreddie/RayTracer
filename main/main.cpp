@@ -29,7 +29,10 @@ int main(int argc, char* argv[]) {
     // parse commandline arguments
     char* inputFile = argv[1];  // first command line argument holds the path to
                                 // the json input file
-    char* outputFile = argv[2];  // second command line argument holds the path
+
+    const char* outputFile;
+    
+    if (argc > 2) outputFile = argv[2];  // second command line argument holds the path
                                  // to the output image file
 
     std::printf("Input file: %s\n", inputFile);
@@ -43,6 +46,9 @@ int main(int argc, char* argv[]) {
 
     // generate a camera according to the input file
     Camera* camera = Camera::createCamera(d["camera"]);
+    if (d.HasMember("output") && d["output"].IsString()) {
+        outputFile = d["output"].GetString();
+    }
 
     // print camera data (based on the input file provided)
     camera->printCamera();

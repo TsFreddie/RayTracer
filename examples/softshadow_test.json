@@ -1,0 +1,54 @@
+{
+	"nbounces": 1,
+
+	"camera": {
+		"type": "pinhole",
+		"width": 100,
+		"height": 100,
+		"fov": 45
+	},
+	"scene": {
+		"backgroundcolor": [ 0.1, 0.1, 0.1 ],
+		"nsamples": 4,
+		"lightsources": [
+			{
+				"type": "arealight",
+				"position": [ -0.1, 0.25, 0.1 ],
+				"intensity": [ 1, 1, 1 ],
+				"sampler": "jittered",
+				"nsamples": 4,
+				"size": 0.1
+			}
+		],
+		"shapes": [
+			{
+				"type": "sphere",
+				"center": [ -0.2, 0.1, -0.35 ],
+				"radius": 0.2,
+				"material": {
+					"ks": 0.3,
+					"kd": 0.8,
+					"specularexponent": 3,
+					"roughness": 0,
+					"transmit": 0,
+					"metallic": 0,
+					"diffusecolor": [1, 1, 1]
+				}
+			},
+			{
+				"type": "plane",
+				"vertices": [
+					[ -10, -0.1, 15 ],
+					[ 10, -0.1, 15 ],
+					[ -10, -0.1, -5 ]
+				],
+				"material": {
+					"ks": 0.1,
+					"kd": 1,
+					"specularexponent": 0,
+					"diffusecolor": [ 1, 1, 1 ]
+				}
+			}
+		]
+	}
+}

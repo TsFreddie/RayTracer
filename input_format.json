@@ -1,0 +1,201 @@
+{
+    // NOTE: this file is for documentation purpose only.
+    //       DO NOT render this file.
+    
+    // Max number of ray bounces
+    "nbounces": 2,
+
+    // Output filename
+    "output": "output.ppm",
+
+    // Camera definition
+	"camera": {
+        // "pinhole" or "thinlen"
+        "type": "thinlen",
+        // Width of the output
+        "width": 400,
+        // Height of the output
+        "height": 400,
+        // Field of view
+        "fov": 45,
+        // thinlen only: Focus distance [default: 1]
+        "focusdistance": 1,
+        // thinlen only: sampler type "random" or "jittered" [default: "jittered"]
+        "sampler": "jittered",
+        // thinlen only: number of samples [default: 32]
+        "nsamples": 16,
+        // thinlen only: aperture size [default: 0.1]
+		"size": 0.05
+    },
+    // Scene definition
+	"scene": {
+        // Background / Sky Color [default: (0,0,0)]
+        "backgroundcolor": [ 0.1, 0.1, 0.1 ],
+        // Ambient light intensity [default: (0,0,0)]
+        "ambientintensity": [ 0, 0.02, 0.05 ],
+        // Whether use bvh [default: true]
+        "bvh": true,
+        // Sampler for rough surface [default: "jittered"]
+        "sampler": "jittered",
+        // Number of samples [default: 4]
+        "nsamples": 4,
+        // LightSource definitions
+		"lightsources": [
+            {
+                // Light type "arealight" or "pointlight"
+                "type": "pointlight",
+                // Light position
+                "position": [ -0.2, 0.233844, 0.08654 ],
+                // Light intensity
+				"intensity": [ 1, 1, 1 ]
+			},
+			{
+                
+                "type": "arealight",
+				"position": [ -0.2, 0.233844, 0.08654 ],
+                "intensity": [ 1, 1, 1 ],
+                // AreaLight only: sampler type [default: "jittered"]
+                "sampler": "jittered",
+                // AreaLight only: number of samples [default: 32]
+                "nsamples": 16,
+                // AreaLight only: size of the light [default: 0.1]
+				"size": 0.1
+            }
+        ],
+        // Shape definitions
+		"shapes": [
+			{
+                // Shape type "ply"
+                "type": "ply",
+                // Ply file location
+                "file": "examples/monkey.ply",
+                // Material definition
+				"material": {
+                    // Blinn-Phong properties
+                    "ka": 0.8, // [ default: 1 ]
+					"ks": 0.2, // [ default: 0 ]
+					"kd": 1, // [ default: 0 ]
+                    "specularexponent": 3, // [ default: 0 ]
+                    
+                    // NOTE: Texture can be assigned to
+                    //       metallic, transmit and roughness
+                    //       diffuse only accept texure
+                    //       diffuse color only accept color
+                    // Metallic: how reflective the material is. [0 - 1, default: 0]
+                    "metallic": 0.4,
+                    // Transmit: how much light travel through the material [0 - 1]
+                    // 1 - Fully transparent (All light travel through)
+                    // 0 - Opaque (No light travel through)
+                    "transmit": 0.8,
+                    // Roughness: How rough the reflective surface is [0 - 1, default: 0 ]
+                    "roughness": 0.3,
+                    // Refractive Index [ default: 1 ]
+                    "refractiveindex": 1.5,
+                    // Diffuse color: color of the object
+                    "diffusecolor": [1, 1, 1],
+                    // Diffuse: ppm file or "checkerboard"
+                    "diffuse": "examples/uvtest.ppm"
+
+				}
+			},
+			{
+                // Shape type "sphere"
+                "type": "sphere",
+                // Center of the sphere
+                "center": [ -0.2, -0.3, -1 ],
+                // Radius of the sphere
+				"radius": 0.1,
+				"material": {
+					"ks": 0.4,
+					"kd": 0.8,
+					"specularexponent": 3,
+					"transmit": 0.2,
+					"metallic": "checkerboard",
+					"roughness": 0.3,
+					"diffusecolor": [ 0, 0, 0.5 ]
+				}
+			},
+			{
+                // Shape type "plane"
+                "type": "plane",
+                // First 3 vertices of the plane:
+                //      The 4th vertex is automatically calculated
+                //      to form a parallelogram.
+                // Normal is calculated using right hand rule:
+                //      v0 is the root vertex.
+                //      v1 is the vertex lies on your index finger.
+                //      v2 is the vertex lies on your middle finger.
+				"vertices": [
+					[ -1, -0.4, -0.5 ],
+					[ 1, -0.4, -0.5 ],
+					[ -1, -0.4, -4 ]
+				],
+				"material": {
+					"ks": 0.1,
+					"kd": 1,
+					"specularexponent": 0,
+					"diffusecolor": [ 1, 1, 1 ],
+					"diffuse": "examples/uvtest.ppm",
+					"metallic": 0
+				}
+            },
+            {
+                // Shape type "triangle"
+                "type": "triangle",
+                // Vertices of the triangle
+                // Normal is calculated using right hand rule:
+                //      v0 is the root vertex.
+                //      v1 is the vertex lies on your index finger.
+                //      v2 is the vertex lies on your middle finger.
+				"vertices": [
+					[ -1, -0.4, -0.5 ],
+					[ 1, -0.4, -0.5 ],
+					[ -1, -0.4, -4 ]
+				],
+				"material": {
+					"ks": 0.1,
+					"kd": 1,
+					"specularexponent": 0,
+					"diffusecolor": [ 1, 1, 1 ],
+					"diffuse": "examples/uvtest.ppm",
+					"metallic": 0
+				}
+			},
+			{
+                // Shape type "triangle"
+                "type": "trimesh",
+                // Vertices of the mesh
+				"vertices": [
+					[ -1, -0.4, -4 ],
+					[ 1, -0.4, -4 ],
+					[ -1, 1.6, -3.5 ],
+					[ 0.8, 1.3, -4.6]
+                ],
+                // Triangles of the mesh (using vertices index)
+                // Normal is calculated using right hand rule:
+                //      v0 is the root vertex.
+                //      v1 is the vertex lies on your index finger.
+                //      v2 is the vertex lies on your middle finger.
+				"tris": [
+					[0, 1, 2],
+					[1, 3, 2]
+                ],
+                // UV coordinates for each vertices.
+				"uv": [
+					[0.25, 0.25],
+					[0.75, 0.25],
+					[0.25, 0.75],
+					[0.75, 0.75]
+				],
+				"material": {
+					"ks": 0.1,
+					"kd": 1,
+					"specularexponent": 0,
+					"diffusecolor": [ 1, 1, 1 ],
+					"diffuse": "examples/uvtest.ppm",
+					"metallic": 0
+				}
+			}
+		]
+	}
+}

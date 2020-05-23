@@ -1,21 +1,21 @@
 {
 	"nbounces": 2,
-
+	"output": "dtest.ppm",
 	"camera": {
 		"type": "thinlen",
 		"width": 400,
 		"height": 400,
 		"fov": 45,
-		"focusdistance": 1,
+		"focusdistance": 4,
 		"sampler": "jittered",
-		"nsamples": 16,
+		"nsamples": 1,
 		"size": 0.05
 	},
 	"scene": {
 		"backgroundcolor": [ 0.1, 0.1, 0.1 ],
 		"ambientintensity": [ 0, 0.02, 0.05 ],
 		"sampler": "jittered",
-		"nsamples": 4,
+		"nsamples": 1,
 		"bvh": true,
 		"lightsources": [
 			{
@@ -23,7 +23,7 @@
 				"position": [ -0.2, 0.233844, 0.08654 ],
 				"intensity": [ 1, 1, 1 ],
 				"sampler": "jittered",
-				"nsamples": 16,
+				"nsamples": 1,
 				"size": 0.1
 			}
 		],

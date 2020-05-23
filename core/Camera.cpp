@@ -65,6 +65,9 @@ Camera* Camera::createCamera(Value& cameraSpecs) {
         if (cameraSpecs.HasMember("size") && cameraSpecs["size"].IsNumber()) {
             size = cameraSpecs["size"].GetDouble();
         }
+        if (cameraSpecs.HasMember("focusdistance") && cameraSpecs["focusdistance"].IsNumber()) {
+            newCamera->focusdistance = cameraSpecs["focusdistance"].GetDouble();
+        }
 
         if (isRandom) {
             newCamera->sampler = new Random(nsamples, size);

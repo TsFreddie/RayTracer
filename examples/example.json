@@ -1,21 +1,29 @@
 {
 	"nbounces": 2,
-
 	"camera": {
-		"type": "pinhole",
+		"type": "thinlen",
 		"width": 400,
 		"height": 400,
-		"fov": 20
+		"fov": 45,
+		"focusdistance": 4,
+		"sampler": "jittered",
+		"nsamples": 1,
+		"size": 0.05
 	},
 	"scene": {
 		"backgroundcolor": [ 0.1, 0.1, 0.1 ],
 		"ambientintensity": [ 0, 0.02, 0.05 ],
-		"bvh": false,
+		"sampler": "jittered",
+		"nsamples": 1,
+		"bvh": true,
 		"lightsources": [
 			{
-				"type": "pointlight",
+				"type": "arealight",
 				"position": [ -0.2, 0.233844, 0.08654 ],
-				"intensity": [ 1, 1, 1 ]
+				"intensity": [ 1, 1, 1 ],
+				"sampler": "jittered",
+				"nsamples": 1,
+				"size": 0.1
 			}
 		],
 		"shapes": [
@@ -27,7 +35,91 @@
 					"kd": 1,
 					"specularexponent": 3,
 					"metallic": 0,
-					"diffusecolor": [1, 0.5, 0.5]
+					"transmit": 1,
+					"refractiveindex": 1.5,
+					"diffusecolor": [0, 0, 0]
+				}
+			},
+			{
+				"type": "sphere",
+				"center": [ 0.2, 0.3, -2 ],
+				"radius": 0.1,
+				"material": {
+					"ks": 0.4,
+					"kd": 0.8,
+					"specularexponent": 3,
+					"diffusecolor": [ 0, 1, 0 ],
+					"diffuse": "checkerboard"
+				}
+			},
+			{
+				"type": "sphere",
+				"center": [ -0.2, -0.3, -1 ],
+				"radius": 0.1,
+				"material": {
+					"ks": 0.4,
+					"kd": 0.8,
+					"specularexponent": 3,
+					"transmit": 0.2,
+					"metallic": "checkerboard",
+					"roughness": 0.3,
+					"diffusecolor": [ 0, 0, 0.5 ]
+
+				}
+			},
+			{
+				"type": "sphere",
+				"center": [ 0.2, -0.3, -1.5 ],
+				"radius": 0.1,
+				"material": {
+					"ks": 0.4,
+					"kd": 0.8,
+					"specularexponent": 3,
+					"metallic": 0,
+					"diffusecolor": [ 0, 0, 1 ]
+				}
+			},
+			{
+				"type": "trimesh",
+				"vertices": [
+					[ -1, -0.4, -4 ],
+					[ 1, -0.4, -4 ],
+					[ -1, 1.6, -3.5 ],
+					[ 0.8, 1.3, -4.6]
+				],
+				"tris": [
+					[0, 1, 2],
+					[1, 3, 2]
+				],
+				"uv": [
+					[0.25, 0.25],
+					[0.75, 0.25],
+					[0.25, 0.75],
+					[0.75, 0.75]
+				],
+				"material": {
+					"ks": 0.1,
+					"kd": 1,
+					"specularexponent": 0,
+					"diffusecolor": [ 1, 1, 1 ],
+					"diffuse": "examples/uvtest.ppm",
+					"metallic": 0
+				}
+			},
+			{
+				"type": "plane",
+				"vertices": [
+					[ -1, -0.4, -0.5 ],
+					[ 1, -0.4, -0.5 ],
+					[ -1, -0.4, -4 ]
+				],
+				"material": {
+					"ks": 0.1,
+					"kd": 1,
+					"specularexponent": 0,
+					"diffusecolor": [ 1, 1, 1 ],
+					"diffuse": "examples/uvtest.ppm",
+					"metallic": 0
 				}
 			}
 		]
